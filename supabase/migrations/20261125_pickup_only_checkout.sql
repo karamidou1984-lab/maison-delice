@@ -24,10 +24,10 @@ begin
     return jsonb_build_object('success',true,'order_id',v_existing.id,
       'status',v_existing.status,'total',v_existing.total,'reused',true);
   end if;
-  if nullif(trim(coalesce(p_full_name,'')) is null or length(trim(p_full_name)) > 120 then
+  if nullif(trim(coalesce(p_full_name,'')), '') is null or length(trim(p_full_name)) > 120 then
     raise exception 'Nom invalide';
   end if;
-  if nullif(trim(coalesce(p_phone,'')) is null or length(trim(p_phone)) > 40 then
+  if nullif(trim(coalesce(p_phone,'')), '') is null or length(trim(p_phone)) > 40 then
     raise exception 'Numéro de téléphone invalide';
   end if;
   if p_customer_note is not null and length(p_customer_note) > 1000 then
