@@ -22,6 +22,9 @@ drop policy if exists "Public reads active categories" on public.categories;
 drop policy if exists "Public can read active products" on public.products;
 drop policy if exists "Public reads active products" on public.products;
 
+drop policy if exists "Public reads active categories" on public.categories;
+drop policy if exists "Public reads active products" on public.products;
+
 create policy "Public reads active categories"
   on public.categories for select
   to anon, authenticated
