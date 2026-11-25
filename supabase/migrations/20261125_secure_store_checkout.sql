@@ -16,6 +16,22 @@ alter table public.stock_movements
   add column if not exists order_id bigint
   references public.orders(id) on delete set null;
 
+-- Align public catalog visibility with the storefront query and checkout validation.
+drop policy if exists "Public can read categories" on public.categories;
+drop policy if exists "Public reads active categories" on public.categories;
+drop policy if exists "Public can read active products" on public.products;
+drop policy if exists "Public reads active products" on public.products;
+
+create policy "Public reads active categories"
+  on public.categories for select
+  to anon, authenticated
+  using (is_active is true);
+
+create policy "Public reads active products"
+  on public.products for select
+  to anon, authenticated
+  using (is_active is true and active is true);
+
 -- Remove the previously audited, schema-incompatible function signature.
 drop function if exists public.create_store_order(
   text, text, text, text, text, jsonb, numeric, text
