@@ -9,6 +9,66 @@
 #admin{display:none;min-height:100vh;background:#f5f6f8;color:#17191c;font-family:Arial,sans-serif}.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.sidebar{background:#fff;border-right:1px solid #e6e8eb;padding:22px 14px}.admin-logo{font-weight:bold;font-size:20px;padding:8px 12px 25px}.admin-logo span{color:#777;font-weight:normal}.sidebtn{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 14px;border-radius:9px;color:#51565d;margin:3px 0}.sidebtn.active,.sidebtn:hover{background:#f0f1f3;color:#111;font-weight:bold}.admin-main{padding:25px;min-width:0}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.admin-top h1{font-size:25px;margin:0}.pill{background:#fff;border:1px solid #e4e6e9;padding:9px 13px;border-radius:20px;color:#555}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat,.panel{background:#fff;border:1px solid #e8eaed;border-radius:13px;padding:18px}.stat small{color:#7d8289}.stat strong{display:block;font-size:25px;margin:10px 0}.up{color:#159b71;font-size:12px}.dashgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-top:16px}.panel h3{margin:0 0 16px;font-size:16px}.bars{height:190px;display:flex;align-items:end;gap:14px;padding:15px 5px;border-bottom:1px solid #ddd}.bar{flex:1;background:#222;border-radius:5px 5px 0 0;position:relative;min-width:12px}.bar:nth-child(2n){background:#aaa}.bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;color:#777}.order-table{width:100%;border-collapse:collapse;font-size:13px}.order-table th,.order-table td{text-align:left;padding:12px 8px;border-bottom:1px solid #eee}.status{padding:5px 9px;border-radius:15px;background:#e9f7ef;color:#168452;font-size:11px}.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.admin-actions button,.blackbtn{background:#17191c;color:white;border:0;padding:10px 15px;border-radius:8px}.content-panel{margin-top:15px}.product-form{display:flex;gap:8px;flex-wrap:wrap}.product-form input{padding:10px;border:1px solid #ddd;border-radius:8px;min-width:130px}.muted{color:#777;font-size:13px}.back{border:0;background:#eee;padding:9px 12px;border-radius:8px}
 @media(max-width:750px){.head{flex-wrap:wrap}.brand{font-size:20px}.search{order:3;flex-basis:100%;max-width:none}.quick{margin-left:auto}.nav button{padding:10px 12px;font-size:12px}.hero{margin:10px;padding:25px 6%;min-height:220px}.hero:after{opacity:.3;right:0}.categories,.products{grid-template-columns:repeat(2,1fr)}.benefits{grid-template-columns:repeat(2,1fr)}.admin-layout{grid-template-columns:1fr}.sidebar{display:flex;overflow:auto;padding:8px;gap:5px;border-right:0;border-bottom:1px solid #ddd}.admin-logo{display:none}.sidebtn{white-space:nowrap;width:auto;padding:10px}.admin-main{padding:14px}.stats{grid-template-columns:repeat(2,1fr)}.dashgrid{grid-template-columns:1fr}.order-table{font-size:11px}.order-table th,.order-table td{padding:9px 4px}}
 </style>
+<style>
+/* Maison Délice storefront refresh */
+:root{--wine:#70213a;--wine2:#8c3850;--gold:#bd9858;--cream:#fbf5eb;--ink:#302721;--muted:#81766d;--line:#eadfce}
+body{background:#fffdf9;color:var(--ink);font-family:Arial,sans-serif}
+.topline{background:#542033;padding:9px 12px;letter-spacing:.45px;font-size:11px}
+.head{padding:15px max(5%,calc((100% - 1160px)/2));gap:24px;background:#fffdf9}
+.brand{font-size:27px;letter-spacing:-.5px}.brandmark{background:#f7eddd;border-color:#c7a66d;color:var(--wine)}
+.search input{background:#fff;border-color:#e6dac9}.search button{background:var(--wine)}
+.quick button{font-size:12px;line-height:1.45}.nav{background:#fff;border-top:1px solid #f0e7dc;border-bottom:1px solid #f0e7dc}
+.nav button{color:#654456;padding:14px 24px;font-size:13px;letter-spacing:.2px}.nav button:hover,.nav button.active{background:#f5eced;color:var(--wine)}
+.hero{max-width:1160px;min-height:390px;margin:28px auto 42px;padding:45px 7%;border-radius:4px;background:linear-gradient(110deg,#f7eee1 0%,#f8f0e5 52%,#ead7bf 100%);box-shadow:0 16px 40px #5c32100d;overflow:hidden}
+.hero-copy{max-width:510px}.hero .eyebrow,.section-heading .eyebrow{color:#a17b43;font-size:10px;letter-spacing:3px}
+.hero h1{font:normal clamp(36px,4.5vw,57px)/1.08 Georgia,serif;color:#60243a;letter-spacing:-1.2px;margin:18px 0}
+.hero p{font:15px/1.8 Georgia,serif;color:#746354;max-width:420px}
+.hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:24px}
+.hero .primary{border-radius:3px;padding:14px 21px;background:#70213a;letter-spacing:.2px}.hero .primary span{font-size:18px;margin-left:12px}
+.hero-note{font:italic 13px Georgia,serif;color:#806b58}
+.hero-art{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:360px;height:320px;border-radius:50%;background:radial-gradient(circle,#f8e8d0 0%,#eed8b9 57%,#e7cfad 58%,transparent 59%);display:grid;place-items:center}
+.art-sun{position:absolute;width:220px;height:220px;border-radius:50%;background:#f9eedc;box-shadow:0 10px 40px #8b63301c}
+.jam-jar{position:absolute;top:76px;width:145px;height:185px;z-index:2;filter:drop-shadow(0 15px 12px #613e2a30)}
+.jar-lid{position:absolute;top:0;left:23px;width:99px;height:22px;border-radius:5px 5px 3px 3px;background:repeating-linear-gradient(90deg,#a67a42 0 4px,#bd9858 4px 7px);border:1px solid #98713f}
+.jar-neck{position:absolute;top:20px;left:28px;width:89px;height:19px;background:#e9cba4;border-left:2px solid #c99e6b;border-right:2px solid #c99e6b}
+.jar-body{position:absolute;top:34px;left:0;width:145px;height:145px;border-radius:25px 25px 34px 34px;border:3px solid #d7b88e;background:linear-gradient(90deg,#9a3448,#c35a5b 28%,#a83d4c 70%,#7e293e);display:grid;place-items:center;box-shadow:inset 8px 0 12px #ffffff22,inset -8px 0 12px #4a142533}
+.jar-body span{background:#f7ebd6;color:#6c2a3c;text-align:center;padding:13px 9px;width:112px;font:10px Georgia,serif;letter-spacing:1px;transform:rotate(-2deg);box-shadow:0 2px 6px #441b2b22}
+.jar-body b{font-size:18px;letter-spacing:1px}.jar-body small{display:block;font-size:7px;margin-top:5px;letter-spacing:2px}
+.art-fruit{position:absolute;color:#a63f51;font-size:55px;z-index:3}.fruit-one{top:36px;left:56px;transform:rotate(-15deg)}.fruit-two{right:43px;bottom:38px;color:#bd8a43;transform:rotate(22deg)}
+.art-leaf{position:absolute;color:#71805b;font-size:76px;z-index:3}.leaf-one{left:22px;bottom:63px;transform:rotate(-28deg)}.leaf-two{right:23px;top:30px;transform:rotate(155deg)}
+.hero-stamp{position:absolute;right:8px;bottom:42px;z-index:4;width:76px;height:76px;border:1px solid #a77b45;border-radius:50%;display:grid;place-content:center;text-align:center;color:#7c5631;font:18px Georgia,serif;background:#f8eedc;transform:rotate(10deg)}.hero-stamp small{font:7px Arial;letter-spacing:1px}
+.section{max-width:1160px;margin:48px auto;padding:0 20px}
+.section-title{text-align:left;color:#60243a;font:normal 34px Georgia,serif;margin:8px 0}
+.section-subtitle{text-align:left;color:#8a7b6d;font:14px Georgia,serif;margin:8px 0 24px}
+#categories .section-title{text-align:center;font-size:32px}
+#categories .section-subtitle{text-align:center}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.category{border:1px solid #eadcc9;border-radius:3px;background:#fff;box-shadow:0 8px 24px #4d2d1509;transition:transform .2s,box-shadow .2s}
+.category:hover{transform:translateY(-4px);box-shadow:0 13px 26px #4d2d1517}
+.category .pic{height:125px;background:linear-gradient(145deg,#f8f0e5,#f1e1cc);font-size:48px}
+.category strong{background:#fff;color:#67283f;padding:15px 8px;font:normal 18px Georgia,serif}
+.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.section-heading .section-title{margin-bottom:4px}.section-heading .section-subtitle{margin:0}.section-flourish{font-size:38px;color:#bd9858}
+.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.product{padding:12px 12px 16px;border:1px solid #eee3d5;border-radius:3px;box-shadow:0 7px 22px #4d2d1509;transition:transform .2s,box-shadow .2s;text-align:left}
+.product:hover{transform:translateY(-4px);box-shadow:0 14px 28px #4d2d1515}
+.product .pic{height:190px;background:#f7f0e6;border-radius:2px;overflow:hidden;font-size:50px}
+.product .pic img{width:100%;height:100%;object-fit:cover;border-radius:0}
+.product h3{font:normal 17px Georgia,serif;color:#60243a;margin:15px 2px 8px;min-height:38px}
+.product .price{color:#8b4b46;font-size:15px;margin:0 2px}
+.product .muted{display:block;margin:7px 2px 0;color:#82786e}
+.product-actions{justify-content:flex-start;margin:13px 0 0}.product-actions button{border-radius:2px;padding:9px 12px;background:#70213a}.product-actions .fav{background:#f5ecec;color:#70213a}
+.benefits{grid-template-columns:repeat(4,1fr);background:#f8f1e7;border:1px solid #eee2d0;border-radius:3px;padding:25px 15px;gap:12px}
+.benefit{color:#81705d;font:13px/1.5 Georgia,serif}.benefit b{color:#64273e;font:normal 16px Georgia,serif;margin:8px 0}
+.footer{background:#542033;color:#f8eee3;padding:34px 18px;font:14px Georgia,serif;line-height:2}.footer small{color:#d9c4b0}
+.admin-entry{background:#33252a;border-radius:3px}
+@media(max-width:750px){
+ .head{padding:13px 16px}.brand{font-size:21px}.brandmark{width:39px;height:39px}.nav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.nav button{white-space:nowrap;padding:12px 15px}
+ .hero{margin:14px 12px 30px;min-height:560px;padding:30px 25px 250px;align-items:flex-start}.hero-copy{max-width:100%}.hero h1{font-size:39px}.hero p{font-size:14px}
+ .hero-art{width:270px;height:240px;right:50%;top:auto;bottom:-5px;transform:translateX(50%)}.art-sun{width:175px;height:175px}.jam-jar{transform:scale(.78);top:38px}.art-fruit{font-size:39px}.fruit-one{top:24px;left:42px}.fruit-two{right:32px;bottom:24px}.art-leaf{font-size:55px}.leaf-one{left:15px;bottom:48px}.leaf-two{right:14px;top:18px}.hero-stamp{width:61px;height:61px;font-size:14px;right:0;bottom:24px}
+ .section{margin:34px auto;padding:0 14px}.section-title{font-size:29px}.categories,.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.category .pic{height:100px}.category strong{font-size:16px;padding:12px 5px}.product{padding:9px}.product .pic{height:145px}.product h3{font-size:15px;min-height:0}.product-actions{flex-wrap:wrap}.product-actions button{font-size:11px;padding:8px 9px}.benefits{grid-template-columns:repeat(2,1fr);padding:18px 10px;gap:18px}.section-heading{align-items:center}
+}
+@media(max-width:380px){.hero h1{font-size:34px}.hero{padding-left:20px;padding-right:20px}.product .pic{height:125px}}
+</style>
 </head>
 <body>
 <div id="shop">
@@ -17,11 +77,9 @@
 <div class="search"><input placeholder="Rechercher un produit..."><button onclick="alert('Recherche de démonstration')">⌕</button></div>
 <div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="alert('Votre panier est vide')">🛒<br>Panier</button></div></header>
 <nav class="nav"><button class="active">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button>Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
-<section class="hero"><div class="hero-copy"><div class="eyebrow">L'ART DU FAIT MAISON</div><h1>Des confitures artisanales au goût authentique</h1><p>Des créations gourmandes préparées avec passion, pour apporter une touche d'authenticité à vos moments précieux.</p><button class="primary" onclick="document.getElementById('categories').scrollIntoView()">Découvrir la boutique</button></div></section>
-<section class="section" id="categories"><div class="section-title">Nos Catégories</div><div class="categories">
-<div class="category"><div class="pic">🍓🫙</div><strong>♧ Confitures</strong></div><div class="category"><div class="pic">🍪 🧁</div><strong>♜ Sucré</strong></div><div class="category"><div class="pic">🥧 🥪</div><strong>♨ Salé</strong></div><div class="category"><div class="pic">🥐 🥨</div><strong>♧ Viennoiserie</strong></div></div></section>
-<section class="section"><div class="section-title">Nos Produits Phares</div><div class="products">
-<div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">MAISON DÉLICE · DEPUIS NOTRE CUISINE</div><h1>Le plaisir du fait maison, tout simplement.</h1><p>Des douceurs préparées avec soin, pour retrouver le goût authentique des bonnes choses et partager de beaux moments.</p><div class="hero-actions"><button class="primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Découvrir nos créations <span>→</span></button><span class="hero-note">♡ Préparé avec passion</span></div></div><div class="hero-art" aria-hidden="true"><div class="art-sun"></div><div class="art-fruit fruit-one">✿</div><div class="art-fruit fruit-two">✿</div><div class="jam-jar"><div class="jar-lid"></div><div class="jar-neck"></div><div class="jar-body"><span>MAISON<br><b>DÉLICE</b><small>FAIT MAISON</small></span></div></div><div class="art-leaf leaf-one">❧</div><div class="art-leaf leaf-two">❧</div><div class="hero-stamp">100%<br><small>GOURMAND</small></div></div></section>
+<section class="section" id="categories"><div class="section-title">Nos Catégories</div><p class="section-subtitle">Des recettes gourmandes pour toutes vos envies</p><div class="categories"></div></section>
+<section class="section products-section"><div class="section-heading"><div><div class="eyebrow">SÉLECTION MAISON</div><div class="section-title">Nos créations gourmandes</div><p class="section-subtitle">Découvrez les produits disponibles dans notre boutique</p></div><span class="section-flourish">✳</span></div><div class="products"></div></section>
 <section class="section"><div class="benefits"><div class="benefit">🏡<b>Retrait sur place</b>Récupérez votre commande au point de vente</div><div class="benefit">🛡️<b>Paiement au retrait</b>Lors de la récupération</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
 <footer class="footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
@@ -85,8 +143,8 @@ async function renderShop(){
   const [cats,prods]=await Promise.all([loadCategories(),loadProducts(false)]);
   const catBox=document.querySelector('#categories .categories');
   if(catBox) catBox.innerHTML=cats.map((c,i)=>`<div class="category"><div class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</div><strong>${esc(c.name)}</strong></div>`).join('');
-  const productBox=document.querySelector('.section .products');
-  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product" data-product-id="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
+  const productBox=document.querySelector('.products-section .products');
+  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product" data-product-id="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
  }catch(e){console.error(e);}
 }
 async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
