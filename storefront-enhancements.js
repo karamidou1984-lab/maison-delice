@@ -51,8 +51,9 @@
   await oldRender();
   const grid=document.querySelector('.section .products');if(!grid)return;
   grid.querySelectorAll('.product').forEach(function(el){
+   const productId=el.getAttribute('data-product-id');
    const title=el.querySelector('h3')?.textContent||'';
-   const p=(productsCache||[]).find(x=>x.name===title);if(!p)return;
+   const p=(productsCache||[]).find(x=>productId?String(x.id)===String(productId):x.name===title);if(!p)return;
    el.setAttribute('data-md-product',p.id);
    if(filter&&!((p.name+' '+(p.description||'')).toLowerCase().includes(filter)))el.style.display='none';
    const actions=document.createElement('div');actions.className='product-actions';
