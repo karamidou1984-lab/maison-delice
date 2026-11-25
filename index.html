@@ -285,8 +285,11 @@ async function manageProductVariants(id){
   const label=capacity.trim();if(!label)return alert('La contenance est obligatoire.');
   const price=prompt('Prix de '+label+' en DA');if(price===null)return;
   const stock=prompt('Stock de '+label);if(stock===null)return;
-  const nPrice=Number(price),nStock=Number(stock);
-  if(!Number.isFinite(nPrice)||nPrice<0||!Number.isInteger(nStock)||nStock<0)return alert('Prix ou stock invalide.');
+  const priceText=String(price).trim().replace(/\\s/g,'').replace(',','.');
+  const stockText=String(stock).trim();
+  const nPrice=priceText===''?NaN:Number(priceText),nStock=stockText===''?NaN:Number(stockText);
+  if(!Number.isFinite(nPrice)||nPrice<0)return alert('Prix invalide. Entrez uniquement un nombre, par exemple 500.');
+  if(!/^\\d+$/.test(stockText)||!Number.isSafeInteger(nStock))return alert('Stock invalide. Entrez un nombre entier, par exemple 10.');
   const {error}=await SUPA.from('product_variants').insert({product_id:id,name:label,weight:label,price:nPrice,stock:nStock,active:true});
   if(error)return alert('Ajout impossible : '+error.message);
  }else{
@@ -294,8 +297,13 @@ async function manageProductVariants(id){
   const v=rows[index],capacity=prompt('Contenance',v.weight||v.name);if(capacity===null)return;
   const price=prompt('Prix en DA',String(v.price));if(price===null)return;
   const stock=prompt('Stock',String(v.stock));if(stock===null)return;
-  const nPrice=Number(price),nStock=Number(stock),label=capacity.trim();
-  if(!label||!Number.isFinite(nPrice)||nPrice<0||!Number.isInteger(nStock)||nStock<0)return alert('Contenance, prix ou stock invalide.');
+  const label=capacity.trim();
+  const priceText=String(price).trim().replace(/\\s/g,'').replace(',','.');
+  const stockText=String(stock).trim();
+  const nPrice=priceText===''?NaN:Number(priceText),nStock=stockText===''?NaN:Number(stockText);
+  if(!label)return alert('La contenance est obligatoire.');
+  if(!Number.isFinite(nPrice)||nPrice<0)return alert('Prix invalide. Entrez uniquement un nombre, par exemple 500.');
+  if(!/^\\d+$/.test(stockText)||!Number.isSafeInteger(nStock))return alert('Stock invalide. Entrez un nombre entier, par exemple 10.');
   const {error}=await SUPA.from('product_variants').update({name:label,weight:label,price:nPrice,stock:nStock}).eq('id',v.id);
   if(error)return alert('Modification impossible : '+error.message);
  }
