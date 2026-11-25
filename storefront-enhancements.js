@@ -51,7 +51,7 @@
  window.setCartQty=function(id,value){
   const x=cart.find(x=>String(x.id)===String(id));if(!x)return;
   const raw=String(value).trim(),next=Number(raw);
-  if(!/^\\d+$/.test(raw)||!Number.isSafeInteger(next)||next<1){alert('Veuillez saisir une quantité entière supérieure à zéro.');openCart();return;}
+  if(!/^\d+$/.test(raw)||!Number.isSafeInteger(next)||next<1){alert('Veuillez saisir une quantité entière supérieure à zéro.');openCart();return;}
   const p=(productsCache||[]).find(p=>Number(p.id)===Number(x.productId));
   const v=(p?.variants||[]).find(v=>Number(v.id)===Number(x.variantId));
   const max=Number(v?.stock??x.stock??0);
