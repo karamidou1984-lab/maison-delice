@@ -49,6 +49,10 @@ create policy "Admins manage product images"
   using (public.is_admin())
   with check (public.is_admin());
 
+-- Explicit table privileges complement RLS (RLS still limits writes to admins).
+grant select on public.product_images to anon, authenticated;
+grant insert, update, delete on public.product_images to authenticated;
+
 -- Align public catalog visibility with the storefront query and checkout validation.
 drop policy if exists "Public can read categories" on public.categories;
 drop policy if exists "Public reads active categories" on public.categories;
