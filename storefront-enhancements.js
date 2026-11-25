@@ -64,8 +64,43 @@
   const head=document.querySelector('.head');
   if(head&&!$('cartModal')){
    const modal=document.createElement('div');modal.id='cartModal';modal.className='shop-modal';
-   modal.innerHTML='<div class="shop-modal-card"><h2>Votre panier</h2><div id="cartContents"></div><p id="cartTotal"></p><p class="muted">Le paiement à la livraison sera activé après la mise en place de l’enregistrement sécurisé des commandes.</p><button class="primary" onclick="closeShopModal(\'cartModal\')">Continuer mes achats</button></div>';
+   modal.innerHTML='<div class="shop-modal-card"><h2>Votre panier</h2><div id="cartContents"></div><p id="cartTotal"></p><button class="primary" id="mdCheckoutOpen" type="button">Commander</button> <button class="back" onclick="closeShopModal(\'cartModal\')">Continuer mes achats</button><div id="mdCheckout" style="display:none;margin-top:18px;border-top:1px solid #eadfce;padding-top:16px"><h3>Vos coordonnées</h3><form id="mdCheckoutForm" style="display:grid;gap:9px"><input name="full_name" required maxlength="120" placeholder="Nom et prénom" autocomplete="name" style="padding:11px;border:1px solid #ddd;border-radius:8px"><input name="phone" required maxlength="40" placeholder="Téléphone" autocomplete="tel" style="padding:11px;border:1px solid #ddd;border-radius:8px"><input name="wilaya" required maxlength="100" placeholder="Wilaya" style="padding:11px;border:1px solid #ddd;border-radius:8px"><input name="city" required maxlength="120" placeholder="Commune" style="padding:11px;border:1px solid #ddd;border-radius:8px"><textarea name="address" required maxlength="500" placeholder="Adresse complète" rows="2" style="padding:11px;border:1px solid #ddd;border-radius:8px"></textarea><textarea name="customer_note" maxlength="1000" placeholder="Note (facultatif)" rows="2" style="padding:11px;border:1px solid #ddd;border-radius:8px"></textarea><p class="muted">Paiement à la livraison. Les frais de livraison seront calculés selon votre destination.</p><button class="primary" type="submit">Confirmer la commande</button><p id="mdCheckoutMessage" class="muted" role="status"></p></form></div></div>';
    modal.addEventListener('click',function(e){if(e.target===modal)closeShopModal('cartModal')});document.body.appendChild(modal);
+   const checkoutOpen=$('mdCheckoutOpen');
+   if(checkoutOpen)checkoutOpen.onclick=function(){
+    if(!cart.length)return alert('Votre panier est vide.');
+    $('mdCheckout').style.display='block';
+    $('mdCheckout').scrollIntoView({behavior:'smooth',block:'nearest'});
+   };
+   const checkoutForm=$('mdCheckoutForm');
+   if(checkoutForm)checkoutForm.onsubmit=async function(e){
+    e.preventDefault();
+    const msg=$('mdCheckoutMessage');const submit=checkoutForm.querySelector('button[type="submit"]');
+    if(!cart.length){msg.textContent='Votre panier est vide.';return;}
+    submit.disabled=true;msg.textContent='Envoi de votre commande...';
+    try{
+     const fd=new FormData(checkoutForm);
+     const requestId=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+     const {data,error}=await SUPA.rpc('create_store_order',{
+      p_full_name:String(fd.get('full_name')||'').trim(),
+      p_phone:String(fd.get('phone')||'').trim(),
+      p_wilaya:String(fd.get('wilaya')||'').trim(),
+      p_city:String(fd.get('city')||'').trim(),
+      p_address:String(fd.get('address')||'').trim(),
+      p_items:cart.map(x=>({product_id:Number(x.id),quantity:Number(x.qty)})),
+      p_request_id:requestId,
+      p_customer_note:String(fd.get('customer_note')||'').trim()||null
+     });
+     if(error)throw error;
+     if(!data||data.success!==true)throw new Error('Réponse de commande inattendue.');
+     cart=[];persist();checkoutForm.reset();$('mdCheckout').style.display='none';
+     $('cartContents').innerHTML='<p><b>Merci ! Votre commande #'+esc(data.order_id)+'</b></p><p>Votre commande a été enregistrée. Paiement à la livraison.</p>';
+     $('cartTotal').textContent='Total : '+money(data.total);
+     $('mdCheckoutOpen').style.display='none';
+     msg.textContent='';
+    }catch(err){msg.textContent='Commande non enregistrée : '+(err.message||err);}
+    finally{submit.disabled=false;}
+   };
    const quick=document.querySelector('.quick');
    if(quick)quick.innerHTML='<button onclick="showFavorites()">♡<br>Favoris</button><button onclick="openCart()">🛒<br>Panier <span id="cartCount">(0)</span></button>';
    const search=document.querySelector('.search');
