@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maison Délice — Le goût authentique du fait maison</title>
+<style>
+:root{--wine:#720d2b;--wine2:#8c1739;--gold:#c5a15b;--cream:#fff8ec;--ink:#282321;--muted:#786f68;--line:#eadfce}
+*{box-sizing:border-box}body{margin:0;background:#fffaf2;color:var(--ink);font-family:Arial, sans-serif}button,input,select{font:inherit}button{cursor:pointer}.topline{background:#690d28;color:#fff;text-align:center;padding:8px;font-size:12px;letter-spacing:.3px}.head{background:#fffaf2;padding:14px 4%;display:flex;align-items:center;gap:20px;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;color:var(--wine);font-family:Georgia,serif;font-weight:bold;font-size:25px}.brandmark{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f3dfb3,#fff);border:2px solid var(--gold);display:grid;place-items:center;font-size:24px}.search{display:flex;max-width:430px;flex:1}.search input{width:100%;padding:12px 15px;border:1px solid #d9cdbb;border-radius:25px 0 0 25px;background:white}.search button{border:0;background:var(--wine);color:white;border-radius:0 25px 25px 0;padding:0 18px}.quick{display:flex;gap:18px}.quick button{border:0;background:none;color:var(--wine);font-size:13px}.nav{display:flex;justify-content:center;gap:0;background:var(--wine);color:white;flex-wrap:wrap}.nav button{border:0;background:transparent;color:white;padding:13px 22px}.nav button:hover,.nav button.active{background:#a47732}.hero{margin:18px auto;max-width:1200px;min-height:245px;border-radius:12px;overflow:hidden;background:linear-gradient(90deg,#fff4de 0%,#f9e7c6 55%,#ead2a7 100%);display:flex;align-items:center;padding:35px 7%;position:relative}.hero:after{content:"🍓  🫙  🍑  🫙  🍇";position:absolute;right:5%;font-size:clamp(38px,7vw,85px);filter:drop-shadow(0 8px 8px #98754b55)}.hero-copy{max-width:520px;position:relative;z-index:1}.eyebrow{color:#98753c;letter-spacing:3px;font-size:11px;font-weight:bold}.hero h1{font: bold clamp(30px,4vw,48px) Georgia,serif;color:var(--wine);margin:10px 0}.hero p{color:#69574a;max-width:390px;line-height:1.6}.primary{background:var(--wine);color:white;border:0;border-radius:25px;padding:12px 22px}.section{max-width:1200px;margin:28px auto;padding:0 20px}.section-title{text-align:center;color:var(--wine);font: bold 30px Georgia,serif;margin:20px 0}.categories,.products,.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.category{border:2px solid #d7b66f;border-radius:14px;overflow:hidden;background:white;text-align:center;box-shadow:0 3px 12px #4d2d1510}.category .pic{height:105px;display:grid;place-items:center;font-size:52px;background:linear-gradient(135deg,#f7e8c9,#fff8ec)}.category strong{display:block;background:var(--wine);color:white;padding:10px;font:italic bold 18px Georgia,serif}.product{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;text-align:center}.product .pic{height:120px;display:grid;place-items:center;font-size:65px;background:#fff7e9;border-radius:10px}.product h3{font: bold 16px Georgia,serif;color:var(--wine)}.price{color:var(--wine);font-weight:bold}.benefits{grid-template-columns:repeat(4,1fr);background:#fff1dc;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:35px}.benefit{text-align:center;color:#755a35;font-size:13px}.benefit b{display:block;color:var(--wine);margin:5px}.footer{background:#5f0c25;color:#fff;padding:25px;text-align:center}.admin-entry{position:fixed;right:18px;bottom:18px;background:#222;color:white;border:0;border-radius:30px;padding:12px 18px;box-shadow:0 5px 20px #0003;z-index:5}
+#admin{display:none;min-height:100vh;background:#f5f6f8;color:#17191c;font-family:Arial,sans-serif}.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.sidebar{background:#fff;border-right:1px solid #e6e8eb;padding:22px 14px}.admin-logo{font-weight:bold;font-size:20px;padding:8px 12px 25px}.admin-logo span{color:#777;font-weight:normal}.sidebtn{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 14px;border-radius:9px;color:#51565d;margin:3px 0}.sidebtn.active,.sidebtn:hover{background:#f0f1f3;color:#111;font-weight:bold}.admin-main{padding:25px;min-width:0}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.admin-top h1{font-size:25px;margin:0}.pill{background:#fff;border:1px solid #e4e6e9;padding:9px 13px;border-radius:20px;color:#555}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat,.panel{background:#fff;border:1px solid #e8eaed;border-radius:13px;padding:18px}.stat small{color:#7d8289}.stat strong{display:block;font-size:25px;margin:10px 0}.up{color:#159b71;font-size:12px}.dashgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-top:16px}.panel h3{margin:0 0 16px;font-size:16px}.bars{height:190px;display:flex;align-items:end;gap:14px;padding:15px 5px;border-bottom:1px solid #ddd}.bar{flex:1;background:#222;border-radius:5px 5px 0 0;position:relative;min-width:12px}.bar:nth-child(2n){background:#aaa}.bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;color:#777}.order-table{width:100%;border-collapse:collapse;font-size:13px}.order-table th,.order-table td{text-align:left;padding:12px 8px;border-bottom:1px solid #eee}.status{padding:5px 9px;border-radius:15px;background:#e9f7ef;color:#168452;font-size:11px}.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.admin-actions button,.blackbtn{background:#17191c;color:white;border:0;padding:10px 15px;border-radius:8px}.content-panel{margin-top:15px}.product-form{display:flex;gap:8px;flex-wrap:wrap}.product-form input{padding:10px;border:1px solid #ddd;border-radius:8px;min-width:130px}.muted{color:#777;font-size:13px}.back{border:0;background:#eee;padding:9px 12px;border-radius:8px}
+@media(max-width:750px){.head{flex-wrap:wrap}.brand{font-size:20px}.search{order:3;flex-basis:100%;max-width:none}.quick{margin-left:auto}.nav button{padding:10px 12px;font-size:12px}.hero{margin:10px;padding:25px 6%;min-height:220px}.hero:after{opacity:.3;right:0}.categories,.products{grid-template-columns:repeat(2,1fr)}.benefits{grid-template-columns:repeat(2,1fr)}.admin-layout{grid-template-columns:1fr}.sidebar{display:flex;overflow:auto;padding:8px;gap:5px;border-right:0;border-bottom:1px solid #ddd}.admin-logo{display:none}.sidebtn{white-space:nowrap;width:auto;padding:10px}.admin-main{padding:14px}.stats{grid-template-columns:repeat(2,1fr)}.dashgrid{grid-template-columns:1fr}.order-table{font-size:11px}.order-table th,.order-table td{padding:9px 4px}}
+</style>
+</head>
+<body>
+<div id="shop">
+<div class="topline">🚚 Livraison dans toute l'Algérie　 |　 ✓ Produits 100% naturels　 |　 🔒 Paiement à la livraison</div>
+<header class="head"><div class="brand"><div class="brandmark">🏡</div><div>Maison Délice<small style="display:block;font:12px Arial;color:#6c4a3c;text-align:center">Confitures Artisanales</small></div></div>
+<div class="search"><input placeholder="Rechercher un produit..."><button onclick="alert('Recherche de démonstration')">⌕</button></div>
+<div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="alert('Votre panier est vide')">🛒<br>Panier</button></div></header>
+<nav class="nav"><button class="active">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button>Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">L'ART DU FAIT MAISON</div><h1>Des confitures artisanales au goût authentique</h1><p>Des créations gourmandes préparées avec passion, pour apporter une touche d'authenticité à vos moments précieux.</p><button class="primary" onclick="document.getElementById('categories').scrollIntoView()">Découvrir la boutique</button></div></section>
+<section class="section" id="categories"><div class="section-title">Nos Catégories</div><div class="categories">
+<div class="category"><div class="pic">🍓🫙</div><strong>♧ Confitures</strong></div><div class="category"><div class="pic">🍪 🧁</div><strong>♜ Sucré</strong></div><div class="category"><div class="pic">🥧 🥪</div><strong>♨ Salé</strong></div><div class="category"><div class="pic">🥐 🥨</div><strong>♧ Viennoiserie</strong></div></div></section>
+<section class="section"><div class="section-title">Nos Produits Phares</div><div class="products">
+<div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
+<section class="section"><div class="benefits"><div class="benefit">🚚<b>Livraison rapide</b>Partout en Algérie</div><div class="benefit">🛡️<b>Paiement à la livraison</b>En toute sécurité</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
+<footer class="footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
+<button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
+</div>
+
+<div id="authModal" style="display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:center;justify-content:center;padding:18px">
+ <div style="background:#fff;border-radius:16px;padding:24px;width:min(420px,100%);box-shadow:0 15px 50px #0003">
+  <h2 style="color:#720d2b;margin-top:0">Connexion administrateur</h2>
+  <p class="muted">Connectez-vous avec le compte administrateur Maison Délice.</p>
+  <form id="adminLoginForm" style="display:grid;gap:10px">
+   <input id="adminEmail" type="email" autocomplete="username" placeholder="Adresse e-mail" required style="padding:12px;border:1px solid #ddd;border-radius:8px">
+   <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Mot de passe" required style="padding:12px;border:1px solid #ddd;border-radius:8px">
+   <button class="primary" type="submit">Se connecter</button>
+   <button type="button" class="back" onclick="closeLogin()">Annuler</button>
+   <div id="loginMessage" class="muted" role="status"></div>
+  </form>
+ </div>
+</div>
+
+<div id="admin"><div class="admin-layout"><aside class="sidebar"><div class="admin-logo">Maison Délice <span>ADMIN</span></div>
+<button class="sidebtn active" onclick="showPage('dashboard',this)">▦　Dashboard</button><button class="sidebtn" onclick="showPage('products',this)">▣　Produits</button><button class="sidebtn" onclick="showPage('orders',this)">▤　Commandes</button><button class="sidebtn" onclick="showPage('customers',this)">♙　Clients</button><button class="sidebtn" onclick="showPage('stock',this)">▥　Stocks</button><button class="sidebtn" onclick="showPage('settings',this)">⚙　Paramètres</button><button class="sidebtn" onclick="closeAdmin()">↩　Retour boutique</button></aside>
+<main class="admin-main"><div class="admin-top"><h1 id="pageTitle">Dashboard</h1><span class="pill">Administrateur　⌄</span></div><div id="pageContent"></div></main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+const SUPA = window.supabase.createClient(window.MAISON_DELICE_SUPABASE.url, window.MAISON_DELICE_SUPABASE.anonKey);
+let currentUser=null, currentPage='dashboard', categoriesCache=[], productsCache=[];
+const money=n=>new Intl.NumberFormat('fr-DZ').format(Number(n||0))+' DA';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function closeLogin(){document.getElementById('authModal').style.display='none'}
+function openAdmin(){document.getElementById('authModal').style.display='flex';document.getElementById('loginMessage').textContent='';}
+function closeAdmin(){document.getElementById('admin').style.display='none';document.getElementById('shop').style.display='block';}
+async function verifyAdmin(user){
+ const {data,error}=await SUPA.from('profiles').select('id,full_name,role').eq('id',user.id).maybeSingle();
+ if(error) throw error;
+ if(!data || data.role!=='admin') throw new Error('Ce compte ne possède pas le rôle administrateur.');
+ return data;
+}
+document.getElementById('adminLoginForm').addEventListener('submit',async e=>{
+ e.preventDefault(); const msg=document.getElementById('loginMessage'); msg.textContent='Connexion...';
+ const email=document.getElementById('adminEmail').value.trim(), password=document.getElementById('adminPassword').value;
+ const {data,error}=await SUPA.auth.signInWithPassword({email,password});
+ if(error){msg.textContent='Connexion impossible : '+error.message;return;}
+ try{currentUser=await verifyAdmin(data.user);closeLogin();document.getElementById('shop').style.display='none';document.getElementById('admin').style.display='block';await render('dashboard');}
+ catch(err){await SUPA.auth.signOut();msg.textContent='Accès refusé : '+err.message;}
+});
+async function loadCategories(){
+ const {data,error}=await SUPA.from('categories').select('id,name,slug,is_active').eq('is_active',true).order('id');
+ if(error) throw error; categoriesCache=data||[]; return categoriesCache;
+}
+async function loadProducts(admin=false){
+ let q=SUPA.from('products').select('id,name,reference,description,price,stock,category_id,active,is_active').order('id',{ascending:false});
+ if(!admin) q=q.eq('is_active',true);
+ const {data,error}=await q; if(error) throw error; productsCache=data||[];
+ const ids=productsCache.map(p=>p.id);
+ if(ids.length){const {data:imgs,error:ie}=await SUPA.from('product_images').select('product_id,image_url,is_primary,position').in('product_id',ids).order('position'); if(!ie){for(const p of productsCache){const found=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>Number(b.is_primary)-Number(a.is_primary))[0];p.image_url=found?.image_url||'';}}}
+ return productsCache;
+}
+async function renderShop(){
+ try{
+  const [cats,prods]=await Promise.all([loadCategories(),loadProducts(false)]);
+  const catBox=document.querySelector('#categories .categories');
+  if(catBox) catBox.innerHTML=cats.map((c,i)=>`<div class="category"><div class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</div><strong>${esc(c.name)}</strong></div>`).join('');
+  const productBox=document.querySelector('.section .products');
+  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
+ }catch(e){console.error(e);}
+}
+async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
+async function render(p){currentPage=p;const titles={dashboard:'Dashboard',products:'Produits',orders:'Commandes',customers:'Clients',stock:'Stocks',settings:'Paramètres'};document.getElementById('pageTitle').textContent=titles[p]||p;const host=document.getElementById('pageContent');host.innerHTML='<div class="panel">Chargement des données...</div>';
+ try{
+  if(p==='dashboard'){
+   const [{data:orders,error:oe},{data:customers,error:ce},prods]=await Promise.all([SUPA.from('orders').select('id,total,status,created_at'),SUPA.from('customers').select('id'),loadProducts(true)]);
+   if(oe)throw oe;if(ce)throw ce;const revenue=(orders||[]).reduce((s,o)=>s+Number(o.total||0),0);
+   host.innerHTML=`<div class="stats"><div class="stat"><small>Chiffre d'affaires</small><strong>${money(revenue)}</strong><span class="muted">Total des commandes enregistrées</span></div><div class="stat"><small>Commandes</small><strong>${orders.length}</strong><span class="muted">Base de données</span></div><div class="stat"><small>Produits</small><strong>${prods.length}</strong><span class="muted">Catalogue</span></div><div class="stat"><small>Clients</small><strong>${customers.length}</strong><span class="muted">Clients enregistrés</span></div></div><div class="panel content-panel"><h3>Dernières commandes</h3>${orders.length?orderTable(orders.slice(-8).reverse()):'<p class="muted">Aucune commande pour le moment.</p>'}</div>`;
+  } else if(p==='products'){
+   const [prods,cats]=await Promise.all([loadProducts(true),loadCategories()]);
+   host.innerHTML=`<div class="panel"><h3>Catalogue produits</h3><div class="admin-actions"><button onclick="document.getElementById('newProduct').style.display='grid'">+ Ajouter un produit</button></div><form id="newProduct" style="display:none;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:12px 0"><input id="pn" placeholder="Nom du produit" required><input id="pref" placeholder="Référence"><input id="pp" type="number" min="0" step="0.01" placeholder="Prix DA" required><input id="ps" type="number" min="0" step="1" placeholder="Stock" required><select id="pc" required><option value="">Catégorie</option>${cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="pdesc" placeholder="Description"><button class="blackbtn" type="submit">Enregistrer</button></form><div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Prix</th><th>Stock</th><th>Catégorie</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.price)}</td><td>${x.stock??0}</td><td>${esc(cats.find(c=>c.id===x.category_id)?.name||'—')}</td><td>${(x.is_active??x.active)?'Actif':'Inactif'}</td></tr>`).join('')}</table></div></div>`;
+   document.getElementById('newProduct').addEventListener('submit',saveProduct);
+  } else if(p==='orders'){
+   const {data,error}=await SUPA.from('orders').select('id,customer_id,status,total,delivery_fee,created_at,customers(name,phone)').order('created_at',{ascending:false});if(error)throw error;
+   host.innerHTML=`<div class="panel"><h3>Commandes</h3>${data.length?`<div style="overflow:auto">${orderTable(data)}</div>`:'<p class="muted">Aucune commande enregistrée.</p>'}</div>`;
+  } else if(p==='customers'){
+   const {data,error}=await SUPA.from('customers').select('id,name,phone,wilaya,commune,created_at').order('created_at',{ascending:false});if(error)throw error;
+   host.innerHTML=`<div class="panel"><h3>Clients</h3>${data.length?`<div style="overflow:auto"><table class="order-table"><tr><th>Nom</th><th>Téléphone</th><th>Wilaya</th><th>Commune</th></tr>${data.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.wilaya)}</td><td>${esc(x.commune)}</td></tr>`).join('')}</table></div>`:'<p class="muted">Aucun client enregistré.</p>'}</div>`;
+  } else if(p==='stock'){
+   const prods=await loadProducts(true);host.innerHTML=`<div class="panel"><h3>État des stocks</h3><table class="order-table"><tr><th>Produit</th><th>Stock</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.stock??0}</td><td>${Number(x.stock)<=0?'Rupture':Number(x.stock)<10?'Stock faible':'Disponible'}</td></tr>`).join('')}</table></div>`;
+  } else if(p==='settings'){
+   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement à la livraison</p><p>Livraison : Toutes les wilayas d'Algérie</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
+  }
+ }catch(e){host.innerHTML=`<div class="panel"><b>Erreur de chargement</b><p class="muted">${esc(e.message||e)}</p></div>`;}
+}
+async function saveProduct(e){e.preventDefault();const msg=document.createElement('p');const form=e.currentTarget;const payload={name:document.getElementById('pn').value.trim(),reference:document.getElementById('pref').value.trim()||null,description:document.getElementById('pdesc').value.trim()||null,price:Number(document.getElementById('pp').value),stock:Number(document.getElementById('ps').value),category_id:Number(document.getElementById('pc').value),active:true,is_active:true};
+ const {error}=await SUPA.from('products').insert(payload);if(error){alert('Impossible d’ajouter le produit : '+error.message);return;}alert('Produit ajouté avec succès.');await render('products');await renderShop();}
+function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Livraison</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>${money(x.delivery_fee)}</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
+(async()=>{await renderShop();const {data}=await SUPA.auth.getSession();if(data.session){try{currentUser=await verifyAdmin(data.session.user)}catch(_){await SUPA.auth.signOut()}}})();
+</script>
+</body></html>
