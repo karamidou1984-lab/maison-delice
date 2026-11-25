@@ -80,19 +80,29 @@
     submit.disabled=true;msg.textContent='Envoi de votre commande...';
     try{
      const fd=new FormData(checkoutForm);
-     const requestId=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
-     const {data,error}=await SUPA.rpc('create_store_order',{
+     const orderPayload={
       p_full_name:String(fd.get('full_name')||'').trim(),
       p_phone:String(fd.get('phone')||'').trim(),
       p_wilaya:String(fd.get('wilaya')||'').trim(),
       p_city:String(fd.get('city')||'').trim(),
       p_address:String(fd.get('address')||'').trim(),
       p_items:cart.map(x=>({product_id:Number(x.id),quantity:Number(x.qty)})),
-      p_request_id:requestId,
       p_customer_note:String(fd.get('customer_note')||'').trim()||null
+     };
+     // Keep one idempotency key for an unchanged order across refreshes and network retries.
+     const fingerprint=JSON.stringify(orderPayload);
+     let pending=null;
+     try{pending=JSON.parse(localStorage.getItem('md_pending_checkout')||'null')}catch(_){}
+     const makeRequestId=()=>((window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)}));
+     const requestId=pending&&pending.fingerprint===fingerprint?pending.id:makeRequestId();
+     localStorage.setItem('md_pending_checkout',JSON.stringify({fingerprint,id:requestId}));
+     const {data,error}=await SUPA.rpc('create_store_order',{
+      ...orderPayload,
+      p_request_id:requestId
      });
      if(error)throw error;
      if(!data||data.success!==true)throw new Error('Réponse de commande inattendue.');
+     localStorage.removeItem('md_pending_checkout');
      cart=[];persist();checkoutForm.reset();$('mdCheckout').style.display='none';
      $('cartContents').innerHTML='<p><b>Merci ! Votre commande #'+esc(data.order_id)+'</b></p><p>Votre commande a été enregistrée. Paiement à la livraison.</p>';
      $('cartTotal').textContent='Total : '+money(data.total);
