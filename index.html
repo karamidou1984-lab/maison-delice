@@ -86,7 +86,7 @@ async function renderShop(){
   const catBox=document.querySelector('#categories .categories');
   if(catBox) catBox.innerHTML=cats.map((c,i)=>`<div class="category"><div class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</div><strong>${esc(c.name)}</strong></div>`).join('');
   const productBox=document.querySelector('.section .products');
-  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
+  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product" data-product-id="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
  }catch(e){console.error(e);}
 }
 async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
