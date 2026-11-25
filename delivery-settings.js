@@ -4,7 +4,7 @@
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function parseOverrides(raw){
     const out={};
-    String(raw||'').split(/\\r?\\n/).forEach(line=>{
+    String(raw||'').split(/\r?\n/).forEach(line=>{
       const s=line.trim(); if(!s)return;
       const pos=s.lastIndexOf('=');
       if(pos<1)throw new Error('Format commune invalide. Utilisez : Commune = prix');
@@ -15,8 +15,8 @@
     return out;
   }
   function rowHtml(wilaya='',fee='',communes={}){
-    const lines=Object.entries(communes||{}).map(([k,v])=>k+' = '+v).join('\\n');
-    return '<div class="panel md-delivery-row" style="margin:12px 0;display:grid;gap:9px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px"><label>Wilaya<input class="md-wilaya" value="'+esc(wilaya)+'" placeholder="Ex. Oran" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></label><label>Tarif par défaut (DA)<input class="md-fee" type="number" min="0" step="1" value="'+esc(fee)+'" placeholder="À définir" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></label></div><label>Tarifs particuliers par commune (facultatif)<textarea class="md-communes" rows="3" placeholder="Bir El Djir = 600\\nEs Sénia = 500" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px">'+esc(lines)+'</textarea></label><button type="button" class="back md-remove">Supprimer cette wilaya</button></div>';
+    const lines=Object.entries(communes||{}).map(([k,v])=>k+' = '+v).join('\n');
+    return '<div class="panel md-delivery-row" style="margin:12px 0;display:grid;gap:9px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px"><label>Wilaya<input class="md-wilaya" value="'+esc(wilaya)+'" placeholder="Ex. Oran" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></label><label>Tarif par défaut (DA)<input class="md-fee" type="number" min="0" step="1" value="'+esc(fee)+'" placeholder="À définir" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></label></div><label>Tarifs particuliers par commune (facultatif)<textarea class="md-communes" rows="3" placeholder="Bir El Djir = 600\nEs Sénia = 500" style="display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:8px">'+esc(lines)+'</textarea></label><button type="button" class="back md-remove">Supprimer cette wilaya</button></div>';
   }
   async function renderDeliverySettings(){
     const host=document.getElementById('pageContent');
