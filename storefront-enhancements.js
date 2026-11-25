@@ -33,7 +33,7 @@
   const box=$('cartContents');if(!box)return;
   box.innerHTML=cart.length?cart.map(function(x){
    const safeName=esc(x.name||'Produit');
-   return '<div class="cart-line"><span>'+safeName+' — '+esc(x.capacity||'')+' × '+Number(x.qty)+'<br><small>'+money(Number(x.price)*Number(x.qty))+'</small></span><span><button onclick="changeCartQty('+Number(x.id)+',-1)">−</button> <button onclick="changeCartQty('+Number(x.id)+',1)">+</button> <button onclick="removeCartItem('+Number(x.id)+')">×</button></span></div>';
+   return '<div class="cart-line"><span>'+safeName+' — '+esc(x.capacity||'')+'<br><small>'+money(Number(x.price)*Number(x.qty))+'</small></span><span class="md-qty-control"><button type="button" aria-label="Diminuer la quantité" onclick="changeCartQty('+Number(x.id)+',-1)">−</button> <input class="md-qty-input" type="number" inputmode="numeric" min="1" max="'+Number(x.stock||0)+'" step="1" value="'+Number(x.qty)+'" aria-label="Quantité de '+safeName+'" onchange="setCartQty('+Number(x.id)+',this.value)" onkeydown="if(event.key===\'Enter\'){this.blur()}"> <button type="button" aria-label="Augmenter la quantité" onclick="changeCartQty('+Number(x.id)+',1)">+</button> <button type="button" onclick="removeCartItem('+Number(x.id)+')">×</button></span></div>';
   }).join(''):'<p class="muted">Votre panier est vide.</p>';
   $('cartTotal').textContent='Total produits : '+money(cart.reduce((a,x)=>a+Number(x.price)*Number(x.qty),0));
   $('cartModal').style.display='flex';
@@ -47,6 +47,16 @@
   else if(v&&next>Number(v.stock)){return alert('La quantité disponible pour cette contenance est atteinte.')}
   else x.qty=next;
   persist();openCart();
+ };
+ window.setCartQty=function(id,value){
+  const x=cart.find(x=>String(x.id)===String(id));if(!x)return;
+  const raw=String(value).trim(),next=Number(raw);
+  if(!/^\\d+$/.test(raw)||!Number.isSafeInteger(next)||next<1){alert('Veuillez saisir une quantité entière supérieure à zéro.');openCart();return;}
+  const p=(productsCache||[]).find(p=>Number(p.id)===Number(x.productId));
+  const v=(p?.variants||[]).find(v=>Number(v.id)===Number(x.variantId));
+  const max=Number(v?.stock??x.stock??0);
+  if(next>max){alert('La quantité demandée dépasse le stock disponible ('+max+').');openCart();return;}
+  x.qty=next;persist();openCart();
  };
  window.removeCartItem=function(id){cart=cart.filter(x=>String(x.id)!==String(id));persist();openCart()};
  window.closeShopModal=function(id){$(id).style.display='none'};
@@ -122,3 +132,6 @@
  });
  if(document.readyState!=='loading'){count();setTimeout(function(){window.renderShop()},0)}
 })();
+
+/* Quantity input with retained +/- controls */
+document.addEventListener('DOMContentLoaded',function(){if(document.getElementById('md-qty-style'))return;const s=document.createElement('style');s.id='md-qty-style';s.textContent='.md-qty-control{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.md-qty-control .md-qty-input{width:58px;min-width:48px;padding:6px 3px;text-align:center;border:1px solid #d8c8b2;border-radius:7px;background:#fff;color:#3f352d;font:inherit;font-size:14px}.md-qty-control button{min-width:30px;min-height:30px;font-size:16px}.cart-line{align-items:center}';document.head.appendChild(s)});
