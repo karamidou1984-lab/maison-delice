@@ -116,12 +116,21 @@ async function render(p){currentPage=p;const titles={dashboard:'Dashboard',produ
 async function saveProductImage(productId,url){
  const clean=String(url||'').trim();
  if(clean&&!/^https:\/\//i.test(clean))throw new Error('Le lien de l’image doit commencer par https://');
- const {data:existing,error:readError}=await SUPA.from('product_images').select('product_id,image_url,is_primary,position').eq('product_id',productId);
+ const {data:existing,error:readError}=await SUPA.from('product_images').select('id').eq('product_id',productId).order('id');
  if(readError)throw readError;
- if(existing&&existing.length){
-  const {error}=await SUPA.from('product_images').update({image_url:clean||null,is_primary:true,position:0}).eq('product_id',productId);
+ if(!clean){
+  const {error}=await SUPA.from('product_images').delete().eq('product_id',productId);
   if(error)throw error;
- }else if(clean){
+  return;
+ }
+ if(existing&&existing.length){
+  const {error}=await SUPA.from('product_images').update({image_url:clean,is_primary:true,position:0}).eq('id',existing[0].id);
+  if(error)throw error;
+  if(existing.length>1){
+   const {error:cleanupError}=await SUPA.from('product_images').delete().eq('product_id',productId).neq('id',existing[0].id);
+   if(cleanupError)throw cleanupError;
+  }
+ }else{
   const {error}=await SUPA.from('product_images').insert({product_id:productId,image_url:clean,is_primary:true,position:0});
   if(error)throw error;
  }
