@@ -61,7 +61,7 @@
    el.setAttribute('data-md-product',p.id);
    if(filter&&!((p.name+' '+(p.description||'')).toLowerCase().includes(filter)))el.style.display='none';
    const actions=document.createElement('div');actions.className='product-actions';
-   const chosen=(p.variants||[])[0];actions.innerHTML='<button '+(!chosen||Number(chosen.stock)<=0?'disabled':'')+' onclick="addToCart('+Number(p.id)+')">Ajouter au panier</button><button class="fav" onclick="toggleFavorite('+Number(p.id)+')">'+(favorites.includes(Number(p.id))?'♥':'♡')+'</button>';
+   const chosen=(p.variants||[]).find(v=>v.active!==false);actions.innerHTML='<button '+(!chosen||Number(chosen.stock)<=0?'disabled':'')+' onclick="addToCart('+Number(p.id)+')">Ajouter au panier</button><button class="fav" onclick="toggleFavorite('+Number(p.id)+')">'+(favorites.includes(Number(p.id))?'♥':'♡')+'</button>';
    el.appendChild(actions);
   });
  };
