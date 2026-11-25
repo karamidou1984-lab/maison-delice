@@ -109,7 +109,7 @@ async function render(p){currentPage=p;const titles={dashboard:'Dashboard',produ
   } else if(p==='stock'){
    const prods=await loadProducts(true);host.innerHTML=`<div class="panel"><h3>État des stocks</h3><table class="order-table"><tr><th>Produit</th><th>Stock</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.stock??0}</td><td>${Number(x.stock)<=0?'Rupture':Number(x.stock)<10?'Stock faible':'Disponible'}</td></tr>`).join('')}</table></div>`;
   } else if(p==='settings'){
-   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement à la livraison</p><p>Mode de récupération : Retrait sur place au point de vente</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
+   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement au retrait de la commande</p><p>Mode de récupération : Retrait sur place au point de vente</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
   }
  }catch(e){host.innerHTML=`<div class="panel"><b>Erreur de chargement</b><p class="muted">${esc(e.message||e)}</p></div>`;}
 }
