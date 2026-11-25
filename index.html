@@ -9,20 +9,128 @@
 #admin{display:none;min-height:100vh;background:#f5f6f8;color:#17191c;font-family:Arial,sans-serif}.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.sidebar{background:#fff;border-right:1px solid #e6e8eb;padding:22px 14px}.admin-logo{font-weight:bold;font-size:20px;padding:8px 12px 25px}.admin-logo span{color:#777;font-weight:normal}.sidebtn{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 14px;border-radius:9px;color:#51565d;margin:3px 0}.sidebtn.active,.sidebtn:hover{background:#f0f1f3;color:#111;font-weight:bold}.admin-main{padding:25px;min-width:0}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.admin-top h1{font-size:25px;margin:0}.pill{background:#fff;border:1px solid #e4e6e9;padding:9px 13px;border-radius:20px;color:#555}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat,.panel{background:#fff;border:1px solid #e8eaed;border-radius:13px;padding:18px}.stat small{color:#7d8289}.stat strong{display:block;font-size:25px;margin:10px 0}.up{color:#159b71;font-size:12px}.dashgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-top:16px}.panel h3{margin:0 0 16px;font-size:16px}.bars{height:190px;display:flex;align-items:end;gap:14px;padding:15px 5px;border-bottom:1px solid #ddd}.bar{flex:1;background:#222;border-radius:5px 5px 0 0;position:relative;min-width:12px}.bar:nth-child(2n){background:#aaa}.bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;color:#777}.order-table{width:100%;border-collapse:collapse;font-size:13px}.order-table th,.order-table td{text-align:left;padding:12px 8px;border-bottom:1px solid #eee}.status{padding:5px 9px;border-radius:15px;background:#e9f7ef;color:#168452;font-size:11px}.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.admin-actions button,.blackbtn{background:#17191c;color:white;border:0;padding:10px 15px;border-radius:8px}.content-panel{margin-top:15px}.product-form{display:flex;gap:8px;flex-wrap:wrap}.product-form input{padding:10px;border:1px solid #ddd;border-radius:8px;min-width:130px}.muted{color:#777;font-size:13px}.back{border:0;background:#eee;padding:9px 12px;border-radius:8px}
 @media(max-width:750px){.head{flex-wrap:wrap}.brand{font-size:20px}.search{order:3;flex-basis:100%;max-width:none}.quick{margin-left:auto}.nav button{padding:10px 12px;font-size:12px}.hero{margin:10px;padding:25px 6%;min-height:220px}.hero:after{opacity:.3;right:0}.categories,.products{grid-template-columns:repeat(2,1fr)}.benefits{grid-template-columns:repeat(2,1fr)}.admin-layout{grid-template-columns:1fr}.sidebar{display:flex;overflow:auto;padding:8px;gap:5px;border-right:0;border-bottom:1px solid #ddd}.admin-logo{display:none}.sidebtn{white-space:nowrap;width:auto;padding:10px}.admin-main{padding:14px}.stats{grid-template-columns:repeat(2,1fr)}.dashgrid{grid-template-columns:1fr}.order-table{font-size:11px}.order-table th,.order-table td{padding:9px 4px}}
 </style>
+<style>
+/* Maison Délice storefront refresh */
+:root{--wine:#70213a;--wine2:#8c3850;--gold:#bd9858;--cream:#fbf5eb;--ink:#302721;--muted:#81766d;--line:#eadfce}
+body{background:#fffdf9;color:var(--ink);font-family:Arial,sans-serif}
+.topline{background:#542033;padding:9px 12px;letter-spacing:.45px;font-size:11px}
+.head{padding:15px max(5%,calc((100% - 1160px)/2));gap:24px;background:#fffdf9}
+.brand{font-size:27px;letter-spacing:-.5px}.brandmark{background:#f7eddd;border-color:#c7a66d;color:var(--wine)}
+.search input{background:#fff;border-color:#e6dac9}.search button{background:var(--wine)}
+.quick button{font-size:12px;line-height:1.45}.nav{background:#fff;border-top:1px solid #f0e7dc;border-bottom:1px solid #f0e7dc}
+.nav button{color:#654456;padding:14px 24px;font-size:13px;letter-spacing:.2px}.nav button:hover,.nav button.active{background:#f5eced;color:var(--wine)}
+.hero{max-width:1160px;min-height:390px;margin:28px auto 42px;padding:45px 7%;border-radius:4px;background:linear-gradient(110deg,#f7eee1 0%,#f8f0e5 52%,#ead7bf 100%);box-shadow:0 16px 40px #5c32100d;overflow:hidden}
+.hero-copy{max-width:510px}.hero .eyebrow,.section-heading .eyebrow{color:#a17b43;font-size:10px;letter-spacing:3px}
+.hero h1{font:normal clamp(36px,4.5vw,57px)/1.08 Georgia,serif;color:#60243a;letter-spacing:-1.2px;margin:18px 0}
+.hero p{font:15px/1.8 Georgia,serif;color:#746354;max-width:420px}
+.hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:24px}
+.hero .primary{border-radius:3px;padding:14px 21px;background:#70213a;letter-spacing:.2px}.hero .primary span{font-size:18px;margin-left:12px}
+.hero-note{font:italic 13px Georgia,serif;color:#806b58}
+.hero-art{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:360px;height:320px;border-radius:50%;background:radial-gradient(circle,#f8e8d0 0%,#eed8b9 57%,#e7cfad 58%,transparent 59%);display:grid;place-items:center}
+.art-sun{position:absolute;width:220px;height:220px;border-radius:50%;background:#f9eedc;box-shadow:0 10px 40px #8b63301c}
+.jam-jar{position:absolute;top:76px;width:145px;height:185px;z-index:2;filter:drop-shadow(0 15px 12px #613e2a30)}
+.jar-lid{position:absolute;top:0;left:23px;width:99px;height:22px;border-radius:5px 5px 3px 3px;background:repeating-linear-gradient(90deg,#a67a42 0 4px,#bd9858 4px 7px);border:1px solid #98713f}
+.jar-neck{position:absolute;top:20px;left:28px;width:89px;height:19px;background:#e9cba4;border-left:2px solid #c99e6b;border-right:2px solid #c99e6b}
+.jar-body{position:absolute;top:34px;left:0;width:145px;height:145px;border-radius:25px 25px 34px 34px;border:3px solid #d7b88e;background:linear-gradient(90deg,#9a3448,#c35a5b 28%,#a83d4c 70%,#7e293e);display:grid;place-items:center;box-shadow:inset 8px 0 12px #ffffff22,inset -8px 0 12px #4a142533}
+.jar-body span{background:#f7ebd6;color:#6c2a3c;text-align:center;padding:13px 9px;width:112px;font:10px Georgia,serif;letter-spacing:1px;transform:rotate(-2deg);box-shadow:0 2px 6px #441b2b22}
+.jar-body b{font-size:18px;letter-spacing:1px}.jar-body small{display:block;font-size:7px;margin-top:5px;letter-spacing:2px}
+.art-fruit{position:absolute;color:#a63f51;font-size:55px;z-index:3}.fruit-one{top:36px;left:56px;transform:rotate(-15deg)}.fruit-two{right:43px;bottom:38px;color:#bd8a43;transform:rotate(22deg)}
+.art-leaf{position:absolute;color:#71805b;font-size:76px;z-index:3}.leaf-one{left:22px;bottom:63px;transform:rotate(-28deg)}.leaf-two{right:23px;top:30px;transform:rotate(155deg)}
+.hero-stamp{position:absolute;right:8px;bottom:42px;z-index:4;width:76px;height:76px;border:1px solid #a77b45;border-radius:50%;display:grid;place-content:center;text-align:center;color:#7c5631;font:18px Georgia,serif;background:#f8eedc;transform:rotate(10deg)}.hero-stamp small{font:7px Arial;letter-spacing:1px}
+.section{max-width:1160px;margin:48px auto;padding:0 20px}
+.section-title{text-align:left;color:#60243a;font:normal 34px Georgia,serif;margin:8px 0}
+.section-subtitle{text-align:left;color:#8a7b6d;font:14px Georgia,serif;margin:8px 0 24px}
+#categories .section-title{text-align:center;font-size:32px}
+#categories .section-subtitle{text-align:center}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.category{border:1px solid #eadcc9;border-radius:3px;background:#fff;box-shadow:0 8px 24px #4d2d1509;transition:transform .2s,box-shadow .2s}
+.category:hover{transform:translateY(-4px);box-shadow:0 13px 26px #4d2d1517}
+.category .pic{height:125px;background:linear-gradient(145deg,#f8f0e5,#f1e1cc);font-size:48px}
+.category strong{background:#fff;color:#67283f;padding:15px 8px;font:normal 18px Georgia,serif}
+.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.section-heading .section-title{margin-bottom:4px}.section-heading .section-subtitle{margin:0}.section-flourish{font-size:38px;color:#bd9858}
+.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.product{padding:12px 12px 16px;border:1px solid #eee3d5;border-radius:3px;box-shadow:0 7px 22px #4d2d1509;transition:transform .2s,box-shadow .2s;text-align:left}
+.product:hover{transform:translateY(-4px);box-shadow:0 14px 28px #4d2d1515}
+.product .pic{height:190px;background:#f7f0e6;border-radius:2px;overflow:hidden;font-size:50px}
+.product .pic img{width:100%;height:100%;object-fit:cover;border-radius:0}
+.product h3{font:normal 17px Georgia,serif;color:#60243a;margin:15px 2px 8px;min-height:38px}
+.product .price{color:#8b4b46;font-size:15px;margin:0 2px}
+.product .muted{display:block;margin:7px 2px 0;color:#82786e}
+.product-actions{justify-content:flex-start;margin:13px 0 0}.product-actions button{border-radius:2px;padding:9px 12px;background:#70213a}.product-actions .fav{background:#f5ecec;color:#70213a}
+.benefits{grid-template-columns:repeat(4,1fr);background:#f8f1e7;border:1px solid #eee2d0;border-radius:3px;padding:25px 15px;gap:12px}
+.benefit{color:#81705d;font:13px/1.5 Georgia,serif}.benefit b{color:#64273e;font:normal 16px Georgia,serif;margin:8px 0}
+.footer{background:#542033;color:#f8eee3;padding:34px 18px;font:14px Georgia,serif;line-height:2}.footer small{color:#d9c4b0}
+.admin-entry{background:#33252a;border-radius:3px}
+@media(max-width:750px){
+ .head{padding:13px 16px}.brand{font-size:21px}.brandmark{width:39px;height:39px}.nav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.nav button{white-space:nowrap;padding:12px 15px}
+ .hero{margin:14px 12px 30px;min-height:560px;padding:30px 25px 250px;align-items:flex-start}.hero-copy{max-width:100%}.hero h1{font-size:39px}.hero p{font-size:14px}
+ .hero-art{width:270px;height:240px;right:50%;top:auto;bottom:-5px;transform:translateX(50%)}.art-sun{width:175px;height:175px}.jam-jar{transform:scale(.78);top:38px}.art-fruit{font-size:39px}.fruit-one{top:24px;left:42px}.fruit-two{right:32px;bottom:24px}.art-leaf{font-size:55px}.leaf-one{left:15px;bottom:48px}.leaf-two{right:14px;top:18px}.hero-stamp{width:61px;height:61px;font-size:14px;right:0;bottom:24px}
+ .section{margin:34px auto;padding:0 14px}.section-title{font-size:29px}.categories,.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.category .pic{height:100px}.category strong{font-size:16px;padding:12px 5px}.product{padding:9px}.product .pic{height:145px}.product h3{font-size:15px;min-height:0}.product-actions{flex-wrap:wrap}.product-actions button{font-size:11px;padding:8px 9px}.benefits{grid-template-columns:repeat(2,1fr);padding:18px 10px;gap:18px}.section-heading{align-items:center}
+}
+@media(max-width:380px){.hero h1{font-size:34px}.hero{padding-left:20px;padding-right:20px}.product .pic{height:125px}}
+</style>
+<style>
+/* Alternative 2: modern, soft and minimal */
+:root{--wine:#b94f78;--wine2:#cf7394;--gold:#d9a8b9;--cream:#fff8fa;--ink:#40343a;--muted:#8d7b83;--line:#f0dfe6}
+body{background:#fff;color:#40343a}
+.topline{background:#bd6687;color:#fff}
+.head{background:#fff;padding-top:17px;padding-bottom:17px;border-color:#f5e8ed}
+.brand{color:#b64e78;font-family:Georgia,serif}.brandmark{background:#fff0f5;border:1px solid #edc9d7;color:#b64e78}
+.search input{border-color:#f0dce4;background:#fffafd}.search button{background:#bd6687}
+.quick button{color:#b64e78}
+.nav{background:#fffafd;border-color:#f3e4ea}
+.nav button{color:#765967}.nav button:hover,.nav button.active{background:#fff0f5;color:#b64e78}
+.hero{background:linear-gradient(115deg,#fff5f8 0%,#fff9fb 57%,#f9e8ef 100%);border:1px solid #f5e2e9;border-radius:22px;box-shadow:0 12px 35px #a84f7410;min-height:360px}
+.hero .eyebrow,.section-heading .eyebrow{color:#c17a96;letter-spacing:2.5px}
+.hero h1{color:#9f4569;font:normal clamp(34px,4.4vw,54px)/1.12 Georgia,serif;letter-spacing:-.8px}
+.hero p{color:#806d76;font:15px/1.8 Arial,sans-serif}
+.hero .primary{background:#c46c8d;border-radius:25px;box-shadow:0 5px 13px #c46c8d30}
+.hero-note{color:#a26e83}
+.hero-art{background:radial-gradient(circle,#fff 0%,#fcebf1 59%,#f8e0e9 60%,transparent 61%);width:350px;height:310px}
+.art-sun{background:#fff7fa;box-shadow:0 10px 35px #c27a9615}
+.jar-lid{background:repeating-linear-gradient(90deg,#d28ca5 0 4px,#e5b1c2 4px 7px);border-color:#c77c99}
+.jar-neck{background:#f7dbe5;border-color:#e4b1c4}
+.jar-body{background:linear-gradient(90deg,#c75f84,#e18eaa 35%,#ce6c90 75%,#b54e76);border-color:#e8b9ca}
+.jar-body span{background:#fff7fa;color:#a94f73}
+.art-fruit{color:#d47799}.fruit-two{color:#e2a2b6}
+.art-leaf{color:#9ba88a}
+.hero-stamp{background:#fff8fa;border-color:#dfa9bb;color:#ad5c7c}
+.section-title{color:#9f4569}
+.section-subtitle{color:#95828a}
+.category{border:1px solid #f1dfe6;border-radius:15px;box-shadow:0 5px 20px #a84f740b}
+.category .pic{background:linear-gradient(145deg,#fff1f6,#fffafd)}
+.category strong{background:#fff;color:#a84f74;font:normal 17px Georgia,serif}
+.category:hover{box-shadow:0 10px 25px #a84f7417}
+.product{border:1px solid #f1e3e8;border-radius:14px;box-shadow:0 5px 18px #a84f740a}
+.product .pic{background:#fff3f7;border-radius:10px}
+.product h3{color:#9f4569}
+.product .price{color:#bd6687}
+.product-actions button{background:#c46c8d;border-radius:20px}
+.product-actions .fav{background:#fff0f5;color:#b64e78}
+.benefits{background:#fff6f9;border:1px solid #f2e1e8;border-radius:16px}
+.benefit{color:#88747e}.benefit b{color:#a84f74}
+.footer{background:#9f4569;color:#fff8fb}
+.admin-entry{background:#9f4569;border-radius:24px}
+@media(max-width:750px){
+ .hero{border-radius:18px;min-height:545px;background:linear-gradient(155deg,#fff5f8,#fffafd 60%,#f9e8ef)}
+ .hero-art{background:radial-gradient(circle,#fff 0%,#fcebf1 59%,#f8e0e9 60%,transparent 61%)}
+ .product{border-radius:12px}.category{border-radius:12px}
+}
+
+
+</style>
 </head>
 <body>
 <div id="shop">
-<div class="topline">🚚 Livraison dans toute l'Algérie　 |　 ✓ Produits 100% naturels　 |　 🔒 Paiement à la livraison</div>
+<div class="topline">✓ Produits artisanaux　 |　 🏡 Retrait des commandes au point de vente　 |　 🛍️ Commande en ligne</div>
 <header class="head"><div class="brand"><div class="brandmark">🏡</div><div>Maison Délice<small style="display:block;font:12px Arial;color:#6c4a3c;text-align:center">Confitures Artisanales</small></div></div>
 <div class="search"><input placeholder="Rechercher un produit..."><button onclick="alert('Recherche de démonstration')">⌕</button></div>
 <div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="alert('Votre panier est vide')">🛒<br>Panier</button></div></header>
 <nav class="nav"><button class="active">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button>Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
-<section class="hero"><div class="hero-copy"><div class="eyebrow">L'ART DU FAIT MAISON</div><h1>Des confitures artisanales au goût authentique</h1><p>Des créations gourmandes préparées avec passion, pour apporter une touche d'authenticité à vos moments précieux.</p><button class="primary" onclick="document.getElementById('categories').scrollIntoView()">Découvrir la boutique</button></div></section>
-<section class="section" id="categories"><div class="section-title">Nos Catégories</div><div class="categories">
-<div class="category"><div class="pic">🍓🫙</div><strong>♧ Confitures</strong></div><div class="category"><div class="pic">🍪 🧁</div><strong>♜ Sucré</strong></div><div class="category"><div class="pic">🥧 🥪</div><strong>♨ Salé</strong></div><div class="category"><div class="pic">🥐 🥨</div><strong>♧ Viennoiserie</strong></div></div></section>
-<section class="section"><div class="section-title">Nos Produits Phares</div><div class="products">
-<div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
-<section class="section"><div class="benefits"><div class="benefit">🚚<b>Livraison rapide</b>Partout en Algérie</div><div class="benefit">🛡️<b>Paiement à la livraison</b>En toute sécurité</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">MAISON DÉLICE · DEPUIS NOTRE CUISINE</div><h1>Le plaisir du fait maison, tout simplement.</h1><p>Des douceurs préparées avec soin, pour retrouver le goût authentique des bonnes choses et partager de beaux moments.</p><div class="hero-actions"><button class="primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Découvrir nos créations <span>→</span></button><span class="hero-note">♡ Préparé avec passion</span></div></div><div class="hero-art" aria-hidden="true"><div class="art-sun"></div><div class="art-fruit fruit-one">✿</div><div class="art-fruit fruit-two">✿</div><div class="jam-jar"><div class="jar-lid"></div><div class="jar-neck"></div><div class="jar-body"><span>MAISON<br><b>DÉLICE</b><small>FAIT MAISON</small></span></div></div><div class="art-leaf leaf-one">❧</div><div class="art-leaf leaf-two">❧</div><div class="hero-stamp">100%<br><small>GOURMAND</small></div></div></section>
+<section class="section" id="categories"><div class="section-title">Nos Catégories</div><p class="section-subtitle">Des recettes gourmandes pour toutes vos envies</p><div class="categories"></div></section>
+<section class="section products-section"><div class="section-heading"><div><div class="eyebrow">SÉLECTION MAISON</div><div class="section-title">Nos créations gourmandes</div><p class="section-subtitle">Découvrez les produits disponibles dans notre boutique</p></div><span class="section-flourish">✳</span></div><div class="products"></div></section>
+<section class="section"><div class="benefits"><div class="benefit">🏡<b>Retrait sur place</b>Récupérez votre commande au point de vente</div><div class="benefit">🛡️<b>Paiement au retrait</b>Lors de la récupération</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
 <footer class="footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
 </div>
@@ -73,20 +181,37 @@ async function loadCategories(){
  if(error) throw error; categoriesCache=data||[]; return categoriesCache;
 }
 async function loadProducts(admin=false){
- let q=SUPA.from('products').select('id,name,reference,description,price,stock,category_id,active,is_active').order('id',{ascending:false});
+ let q=SUPA.from('products').select('id,name,reference,description,capacity,price,stock,category_id,active,is_active').order('id',{ascending:false});
  if(!admin) q=q.eq('is_active',true);
  const {data,error}=await q; if(error) throw error; productsCache=data||[];
  const ids=productsCache.map(p=>p.id);
+ if(ids.length){
+  const {data:variants,error:ve}=await SUPA.from('product_variants').select('id,product_id,name,weight,price,stock,active').in('product_id',ids).order('id');
+  if(ve) throw ve;
+  for(const p of productsCache)p.variants=(variants||[]).filter(v=>Number(v.product_id)===Number(p.id));
+ }
  if(ids.length){const {data:imgs,error:ie}=await SUPA.from('product_images').select('product_id,image_url,is_primary,position').in('product_id',ids).order('position'); if(!ie){for(const p of productsCache){const found=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>Number(b.is_primary)-Number(a.is_primary))[0];p.image_url=found?.image_url||'';}}}
  return productsCache;
+}
+function updateVariantDisplay(productId){
+ const select=document.getElementById('md-variant-'+productId);if(!select)return;
+ const opt=select.options[select.selectedIndex];if(!opt)return;
+ const price=document.getElementById('md-price-'+productId),stock=document.getElementById('md-stock-'+productId);
+ if(price)price.textContent=money(Number(opt.dataset.price||0));
+ if(stock)stock.textContent=Number(opt.dataset.stock||0)>0?'Disponible':'Rupture de stock';
 }
 async function renderShop(){
  try{
   const [cats,prods]=await Promise.all([loadCategories(),loadProducts(false)]);
   const catBox=document.querySelector('#categories .categories');
   if(catBox) catBox.innerHTML=cats.map((c,i)=>`<div class="category"><div class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</div><strong>${esc(c.name)}</strong></div>`).join('');
-  const productBox=document.querySelector('.section .products');
-  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
+  const productBox=document.querySelector('.products-section .products');
+  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>{
+   const variants=(p.variants||[]).filter(v=>v.active!==false);
+   const first=variants[0];
+   const label=v=>v.weight||v.name||'Format standard';
+   return `<div class="product" data-product-id="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:'🍯'}</div><h3>${esc(p.name)}</h3>${variants.length?`<label class="muted" for="md-variant-${p.id}">Contenance</label><select id="md-variant-${p.id}" class="md-capacity-select" onchange="updateVariantDisplay(${p.id})">${variants.map(v=>`<option value="${v.id}" data-price="${v.price}" data-stock="${v.stock}" data-label="${esc(label(v))}">${esc(label(v))}</option>`).join('')}</select><div class="price" id="md-price-${p.id}">${money(first?.price??p.price)}</div><small class="muted" id="md-stock-${p.id}">${Number(first?.stock??0)>0?'Disponible':'Rupture de stock'}</small>`:`<div class="price">${money(p.price)}</div><small class="muted">Contenance à configurer</small>`}</div>`;
+  }).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
  }catch(e){console.error(e);}
 }
 async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
@@ -98,24 +223,296 @@ async function render(p){currentPage=p;const titles={dashboard:'Dashboard',produ
    host.innerHTML=`<div class="stats"><div class="stat"><small>Chiffre d'affaires</small><strong>${money(revenue)}</strong><span class="muted">Total des commandes enregistrées</span></div><div class="stat"><small>Commandes</small><strong>${orders.length}</strong><span class="muted">Base de données</span></div><div class="stat"><small>Produits</small><strong>${prods.length}</strong><span class="muted">Catalogue</span></div><div class="stat"><small>Clients</small><strong>${customers.length}</strong><span class="muted">Clients enregistrés</span></div></div><div class="panel content-panel"><h3>Dernières commandes</h3>${orders.length?orderTable(orders.slice(-8).reverse()):'<p class="muted">Aucune commande pour le moment.</p>'}</div>`;
   } else if(p==='products'){
    const [prods,cats]=await Promise.all([loadProducts(true),loadCategories()]);
-   host.innerHTML=`<div class="panel"><h3>Catalogue produits</h3><div class="admin-actions"><button onclick="document.getElementById('newProduct').style.display='grid'">+ Ajouter un produit</button></div><form id="newProduct" style="display:none;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:12px 0"><input id="pn" placeholder="Nom du produit" required><input id="pref" placeholder="Référence"><input id="pp" type="number" min="0" step="0.01" placeholder="Prix DA" required><input id="ps" type="number" min="0" step="1" placeholder="Stock" required><select id="pc" required><option value="">Catégorie</option>${cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="pdesc" placeholder="Description"><button class="blackbtn" type="submit">Enregistrer</button></form><div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Prix</th><th>Stock</th><th>Catégorie</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.price)}</td><td>${x.stock??0}</td><td>${esc(cats.find(c=>c.id===x.category_id)?.name||'—')}</td><td>${(x.is_active??x.active)?'Actif':'Inactif'}</td></tr>`).join('')}</table></div></div>`;
+   host.innerHTML=`<div class="panel"><h3>Catalogue produits</h3><div class="admin-actions"><button onclick="document.getElementById('newProduct').style.display='grid'">+ Ajouter un produit</button></div><form id="newProduct" style="display:none;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:12px 0"><input id="pn" placeholder="Nom du produit" required><input id="pref" placeholder="Référence"><input id="pcap" placeholder="Contenance (ex. 250 g, 1 L)"><input id="pp" type="number" min="0" step="0.01" placeholder="Prix DA" required><input id="ps" type="number" min="0" step="1" placeholder="Stock" required><select id="pc" required><option value="">Catégorie</option>${cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="pdesc" placeholder="Description"><input id="pimg" type="url" placeholder="Lien de l’image (https://...)"><button class="blackbtn" type="submit">Enregistrer</button></form><div style="overflow:auto"><table class="order-table"><tr><th>Image</th><th>Produit</th><th>Formats disponibles</th><th>Prix dès</th><th>Stock total</th><th>Catégorie</th><th>État</th></tr>${prods.map(x=>`<tr><td>${x.image_url?`<img src="${esc(x.image_url)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px">`:"—"}</td><td>${esc(x.name)}</td><td>${(x.variants||[]).filter(v=>v.active!==false).map(v=>esc(v.weight||v.name)).join(', ')||'—'}</td><td>${money(Math.min(...((x.variants||[]).filter(v=>v.active!==false).map(v=>Number(v.price)).concat([Number(x.price)]))))}</td><td>${(x.variants||[]).reduce((s,v)=>s+Number(v.stock||0),0)}</td><td>${esc(cats.find(c=>c.id===x.category_id)?.name||'—')}</td><td>${(x.is_active??x.active)?'Actif':'Inactif'} <button type="button" onclick="editProduct(${Number(x.id)})">Modifier</button> <button type="button" onclick="manageProductVariants(${Number(x.id)})">Gérer les contenances</button> <button type="button" onclick="editProductImage(${Number(x.id)})">Image</button> <button type="button" onclick="toggleProductActive(${Number(x.id)},${(x.is_active??x.active)?'false':'true'})">${(x.is_active??x.active)?'Désactiver':'Activer'}</button></td></tr>`).join('')}</table></div></div>`;
    document.getElementById('newProduct').addEventListener('submit',saveProduct);
   } else if(p==='orders'){
-   const {data,error}=await SUPA.from('orders').select('id,customer_id,status,total,delivery_fee,created_at,customers(name,phone)').order('created_at',{ascending:false});if(error)throw error;
-   host.innerHTML=`<div class="panel"><h3>Commandes</h3>${data.length?`<div style="overflow:auto">${orderTable(data)}</div>`:'<p class="muted">Aucune commande enregistrée.</p>'}</div>`;
+   const {data,error}=await SUPA.from('orders').select('id,customer_id,status,total,created_at,customers(name,phone),order_items(quantity,unit_price,capacity_snapshot,products(name))').order('created_at',{ascending:false});if(error)throw error;
+   host.innerHTML=`<div class="panel"><h3>Gestion des commandes</h3><p class="muted">Consultez les coordonnées du client et mettez à jour l’état de traitement.</p>${data.length?`<div style="overflow:auto">${ordersManagementTable(data)}</div>`:'<p class="muted">Aucune commande enregistrée.</p>'}</div>`;
   } else if(p==='customers'){
-   const {data,error}=await SUPA.from('customers').select('id,name,phone,wilaya,commune,created_at').order('created_at',{ascending:false});if(error)throw error;
-   host.innerHTML=`<div class="panel"><h3>Clients</h3>${data.length?`<div style="overflow:auto"><table class="order-table"><tr><th>Nom</th><th>Téléphone</th><th>Wilaya</th><th>Commune</th></tr>${data.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.wilaya)}</td><td>${esc(x.commune)}</td></tr>`).join('')}</table></div>`:'<p class="muted">Aucun client enregistré.</p>'}</div>`;
+   const {data,error}=await SUPA.from('customers').select('id,name,phone,created_at').order('created_at',{ascending:false});if(error)throw error;
+   host.innerHTML=`<div class="panel"><h3>Clients</h3>${data.length?`<div style="overflow:auto"><table class="order-table"><tr><th>Nom</th><th>Téléphone</th></tr>${data.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td></tr>`).join('')}</table></div>`:'<p class="muted">Aucun client enregistré.</p>'}</div>`;
   } else if(p==='stock'){
-   const prods=await loadProducts(true);host.innerHTML=`<div class="panel"><h3>État des stocks</h3><table class="order-table"><tr><th>Produit</th><th>Stock</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.stock??0}</td><td>${Number(x.stock)<=0?'Rupture':Number(x.stock)<10?'Stock faible':'Disponible'}</td></tr>`).join('')}</table></div>`;
+   const prods=await loadProducts(true);host.innerHTML=`<div class="panel"><h3>État des stocks par contenance</h3><table class="order-table"><tr><th>Produit</th><th>Contenance</th><th>Stock</th><th>État</th></tr>${prods.flatMap(x=>(x.variants||[]).map(v=>`<tr><td>${esc(x.name)}</td><td>${esc(v.weight||v.name)}</td><td>${v.stock??0}</td><td>${Number(v.stock)<=0?'Rupture':Number(v.stock)<10?'Stock faible':'Disponible'}</td></tr>`)).join('')}</table></div>`;
   } else if(p==='settings'){
-   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement à la livraison</p><p>Livraison : Toutes les wilayas d'Algérie</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
+   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement au retrait de la commande</p><p>Mode de récupération : Retrait sur place au point de vente</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
   }
  }catch(e){host.innerHTML=`<div class="panel"><b>Erreur de chargement</b><p class="muted">${esc(e.message||e)}</p></div>`;}
 }
-async function saveProduct(e){e.preventDefault();const msg=document.createElement('p');const form=e.currentTarget;const payload={name:document.getElementById('pn').value.trim(),reference:document.getElementById('pref').value.trim()||null,description:document.getElementById('pdesc').value.trim()||null,price:Number(document.getElementById('pp').value),stock:Number(document.getElementById('ps').value),category_id:Number(document.getElementById('pc').value),active:true,is_active:true};
- const {error}=await SUPA.from('products').insert(payload);if(error){alert('Impossible d’ajouter le produit : '+error.message);return;}alert('Produit ajouté avec succès.');await render('products');await renderShop();}
-function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Livraison</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>${money(x.delivery_fee)}</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
+async function saveProductImage(productId,url){
+ const clean=String(url||'').trim();
+ if(clean&&!/^https:\/\//i.test(clean))throw new Error('Le lien de l’image doit commencer par https://');
+ const {data:existing,error:readError}=await SUPA.from('product_images').select('id').eq('product_id',productId).order('id');
+ if(readError)throw readError;
+ if(!clean){
+  const {error}=await SUPA.from('product_images').delete().eq('product_id',productId);
+  if(error)throw error;
+  return;
+ }
+ if(existing&&existing.length){
+  const {error}=await SUPA.from('product_images').update({image_url:clean,is_primary:true,position:0}).eq('id',existing[0].id);
+  if(error)throw error;
+  if(existing.length>1){
+   const {error:cleanupError}=await SUPA.from('product_images').delete().eq('product_id',productId).neq('id',existing[0].id);
+   if(cleanupError)throw cleanupError;
+  }
+ }else{
+  const {error}=await SUPA.from('product_images').insert({product_id:productId,image_url:clean,is_primary:true,position:0});
+  if(error)throw error;
+ }
+}
+async function editProductImage(id){
+ const p=(await loadProducts(true)).find(x=>Number(x.id)===Number(id));if(!p)return;
+ const url=prompt('Lien HTTPS de l’image du produit',p.image_url||'');if(url===null)return;
+ try{await saveProductImage(id,url);await render('products');await renderShop();}
+ catch(e){alert('Image non enregistrée : '+e.message);}
+}
+async function editProduct(id){
+ const p=(await loadProducts(true)).find(x=>Number(x.id)===Number(id));if(!p)return alert('Produit introuvable.');
+ const name=prompt('Nom du produit',p.name);if(name===null)return;
+ const cleanName=name.trim();if(!cleanName)return alert('Le nom du produit est obligatoire.');
+ const {error}=await SUPA.from('products').update({name:cleanName}).eq('id',id);
+ if(error)return alert('Modification impossible : '+error.message);
+ await render('products');await renderShop();
+}
+async function manageProductVariants(id){
+ const p=(await loadProducts(true)).find(x=>Number(x.id)===Number(id));if(!p)return alert('Produit introuvable.');
+ const rows=p.variants||[];
+ const menu=rows.map((v,i)=>(i+1)+'. '+(v.weight||v.name)+' — '+money(v.price)+' — stock '+v.stock+(v.active===false?' (inactif)':'')).join('\\n');
+ const choice=prompt('Formats de '+p.name+' :\\n'+menu+'\\n\\nEntrez le numéro à modifier, ou 0 pour ajouter un format.', '0');
+ if(choice===null)return;
+ if(choice.trim()==='0'){
+  const capacity=prompt('Nouvelle contenance (ex. 250 g, 500 g, 1 kg, 250 ml, 1 L)');if(capacity===null)return;
+  const label=capacity.trim();if(!label)return alert('La contenance est obligatoire.');
+  const price=prompt('Prix de '+label+' en DA');if(price===null)return;
+  const stock=prompt('Stock de '+label);if(stock===null)return;
+  const priceText=String(price).trim().replace(/\\s/g,'').replace(',','.');
+  const stockText=String(stock).trim();
+  const nPrice=priceText===''?NaN:Number(priceText),nStock=stockText===''?NaN:Number(stockText);
+  if(!Number.isFinite(nPrice)||nPrice<0)return alert('Prix invalide. Entrez uniquement un nombre, par exemple 500.');
+  if(!/^\\d+$/.test(stockText)||!Number.isSafeInteger(nStock))return alert('Stock invalide. Entrez un nombre entier, par exemple 10.');
+  const {error}=await SUPA.from('product_variants').insert({product_id:id,name:label,weight:label,price:nPrice,stock:nStock,active:true});
+  if(error)return alert('Ajout impossible : '+error.message);
+ }else{
+  const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=rows.length)return alert('Numéro invalide.');
+  const v=rows[index],capacity=prompt('Contenance',v.weight||v.name);if(capacity===null)return;
+  const price=prompt('Prix en DA',String(v.price));if(price===null)return;
+  const stock=prompt('Stock',String(v.stock));if(stock===null)return;
+  const label=capacity.trim();
+  const priceText=String(price).trim().replace(/\\s/g,'').replace(',','.');
+  const stockText=String(stock).trim();
+  const nPrice=priceText===''?NaN:Number(priceText),nStock=stockText===''?NaN:Number(stockText);
+  if(!label)return alert('La contenance est obligatoire.');
+  if(!Number.isFinite(nPrice)||nPrice<0)return alert('Prix invalide. Entrez uniquement un nombre, par exemple 500.');
+  if(!/^\\d+$/.test(stockText)||!Number.isSafeInteger(nStock))return alert('Stock invalide. Entrez un nombre entier, par exemple 10.');
+  const {error}=await SUPA.from('product_variants').update({name:label,weight:label,price:nPrice,stock:nStock}).eq('id',v.id);
+  if(error)return alert('Modification impossible : '+error.message);
+ }
+ await render('products');await renderShop();
+}
+async function toggleProductActive(id,active){
+ const {error}=await SUPA.from('products').update({active:active,is_active:active}).eq('id',id);
+ if(error)return alert('Impossible de modifier la visibilité : '+error.message);
+ await render('products');await renderShop();
+}
+async function saveProduct(e){
+ e.preventDefault();
+ const imageInput=document.getElementById('pimg').value.trim();
+ if(imageInput&&!/^https:\/\//i.test(imageInput)){alert('Le lien de l’image doit commencer par https://');return;}
+ const capacity=document.getElementById('pcap').value.trim();
+ const price=Number(document.getElementById('pp').value),stock=Number(document.getElementById('ps').value);
+ const payload={name:document.getElementById('pn').value.trim(),reference:document.getElementById('pref').value.trim()||null,description:document.getElementById('pdesc').value.trim()||null,capacity:capacity||null,price,stock,category_id:Number(document.getElementById('pc').value),active:true,is_active:true};
+ const {data:created,error}=await SUPA.from('products').insert(payload).select('id').single();
+ if(error){alert('Impossible d’ajouter le produit : '+error.message);return;}
+ const {error:variantError}=await SUPA.from('product_variants').insert({product_id:created.id,name:capacity||'Format standard',weight:capacity||null,price,stock,active:true});
+ if(variantError){alert('Produit créé, mais première contenance non enregistrée : '+variantError.message);await render('products');return;}
+ if(imageInput){try{await saveProductImage(created.id,imageInput);}catch(imageError){alert('Produit ajouté, mais image non enregistrée : '+imageError.message);await render('products');return;}}
+ alert('Produit ajouté avec succès.');await render('products');await renderShop();
+}
+async function updateOrderStatus(orderId,value){
+ const allowed=['pending','confirmed','preparing','shipped','delivered','cancelled'];
+ if(!allowed.includes(value)){alert('Statut non valide.');return;}
+ const {error}=await SUPA.from('orders').update({status:value}).eq('id',orderId);
+ if(error){alert('Impossible de modifier le statut : '+error.message);await render('orders');return;}
+ await render('orders');
+}
+async function deleteStoreOrder(orderId){
+ if(!Number.isInteger(Number(orderId))||Number(orderId)<=0)return;
+ const confirmed=confirm('Supprimer définitivement la commande #'+orderId+' ? Les quantités de cette commande seront remises en stock. Le client sera conservé.');
+ if(!confirmed)return;
+ const {data,error}=await SUPA.rpc('admin_delete_store_order',{p_order_id:Number(orderId)});
+ if(error){alert('Suppression impossible : '+error.message);return;}
+ if(!data||data.success!==true){alert('La suppression n’a pas été confirmée.');return;}
+ alert('Commande #'+orderId+' supprimée. Le stock a été restauré.');
+ await render('orders');
+ await render('products');
+}
+function ordersManagementTable(rows){
+ const labels={pending:'En attente',confirmed:'Confirmée',preparing:'En préparation',shipped:'Prête à retirer',delivered:'Retirée',cancelled:'Annulée'};
+ return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Contact</th><th>Articles</th><th>Total</th><th>Statut</th><th>Date</th><th>Action</th></tr>${rows.map(x=>{const st=allowedOrderStatus(x.status);return `<tr><td>#${x.id}</td><td>${esc(x.customers?.name||'—')}</td><td>${esc(x.customers?.phone||'—')}</td><td>${(x.order_items||[]).map(it=>esc(it.products?.name||'Produit')+(it.capacity_snapshot?' · '+esc(it.capacity_snapshot):'')+' × '+Number(it.quantity||0)).join('<br>')||'—'}</td><td>${money(x.total)}</td><td><select aria-label="Statut commande ${x.id}" onchange="updateOrderStatus(${Number(x.id)},this.value)">${['pending','confirmed','preparing','shipped','delivered','cancelled'].map(v=>`<option value="${v}" ${st===v?'selected':''}>${labels[v]}</option>`).join('')}</select></td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td><td><button type="button" onclick="deleteStoreOrder(${Number(x.id)})" style="background:#8b1e35;color:#fff;border:0;border-radius:7px;padding:7px 10px">Supprimer</button></td></tr>`;}).join('')}</table>`;
+}
+function allowedOrderStatus(status){return ['pending','confirmed','preparing','shipped','delivered','cancelled'].includes(status)?status:'pending'}
+function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
 (async()=>{await renderShop();const {data}=await SUPA.auth.getSession();if(data.session){try{currentUser=await verifyAdmin(data.session.user)}catch(_){await SUPA.auth.signOut()}}})();
 </script>
+<style>.product-actions{display:flex;gap:7px;justify-content:center;margin-top:10px}.product-actions button{border:0;border-radius:18px;padding:8px 12px;background:#720d2b;color:white;font-size:12px}.product-actions .fav{background:#f5e8e8;color:#720d2b}.cart-line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #eadfce}.cart-line button{border:0;background:#f5e8e8;color:#720d2b;border-radius:8px;padding:4px 8px}.shop-modal{position:fixed;inset:0;background:#0008;z-index:30;display:flex;align-items:center;justify-content:center;padding:16px}.shop-modal-card{background:#fffaf2;border-radius:16px;padding:22px;width:min(520px,100%);max-height:85vh;overflow:auto}.shop-modal-card h2{color:#720d2b;font-family:Georgia,serif}</style><style id="beige-luxury-theme">
+/* Beige Luxury theme */
+:root{--wine:#76513a;--wine2:#92704f;--gold:#c9a66b;--cream:#fbf7ef;--ink:#3f352d;--muted:#887b6d;--line:#e9dfcf}
+body{background:#fffdf9;color:#3f352d}
+.topline{background:#6c4b37;color:#fffaf1}
+.head{background:#fffdf9;border-color:#eee4d6}
+.brand{color:#76513a}.brandmark{background:#f6eddf;border-color:#c9a66b;color:#76513a}
+.search input{border-color:#e6dac8;background:#fff}.search button{background:#76513a}
+.quick button{color:#76513a}
+.nav{background:#fffaf3;border-color:#eee4d6}
+.nav button{color:#705844}.nav button:hover,.nav button.active{background:#eee3d2;color:#68472f}
+.hero{background:linear-gradient(112deg,#f8f1e6 0%,#f4eadb 55%,#ead9c1 100%);border:1px solid #e9ddca;border-radius:16px;box-shadow:0 12px 34px #60452a10}
+.hero .eyebrow,.section-heading .eyebrow{color:#a78655}
+.hero h1{color:#654832}
+.hero p{color:#756557}
+.hero .primary{background:#76513a;border-radius:24px;box-shadow:0 5px 14px #76513a22}
+.hero-note{color:#8a725a}
+.hero-art{background:radial-gradient(circle,#fff8ec 0%,#f0e1ca 58%,#e5d1b4 59%,transparent 60%)}
+.art-sun{background:#fbf3e5;box-shadow:0 10px 35px #785a3318}
+.jar-lid{background:repeating-linear-gradient(90deg,#a9824c 0 4px,#c5a36c 4px 7px);border-color:#987447}
+.jar-neck{background:#e9d4b5;border-color:#c9a779}
+.jar-body{background:linear-gradient(90deg,#9a6248,#bd8a65 35%,#a66d50 75%,#87533e);border-color:#d2b58d}
+.jar-body span{background:#f8f0e2;color:#76513a}
+.art-fruit{color:#ad8055}.fruit-two{color:#c39a68}
+.art-leaf{color:#8d9478}
+.hero-stamp{background:#fbf4e8;border-color:#c9a66b;color:#80613d}
+.section-title{color:#654832}
+.section-subtitle{color:#8b7b69}
+.category{border:1px solid #e8ddcd;border-radius:12px;box-shadow:0 6px 20px #62482c0c}
+.category .pic{background:linear-gradient(145deg,#f8f1e6,#efe3d1)}
+.category strong{background:#fff;color:#76513a;font:normal 18px Georgia,serif}
+.product{border:1px solid #e9dfd1;border-radius:12px;box-shadow:0 6px 20px #62482c0b}
+.product .pic{background:#f6efe4;border-radius:9px}
+.product h3{color:#654832}
+.product .price{color:#896344}
+.product-actions button{background:#76513a;border-radius:20px}
+.product-actions .fav{background:#f1e7d8;color:#76513a}
+.benefits{background:#f7f1e7;border:1px solid #e9dfd1;border-radius:14px}
+.benefit{color:#806e5a}.benefit b{color:#76513a}
+.footer{background:#604633;color:#fff8ec}
+.admin-entry{background:#604633}
+@media(max-width:750px){.hero{background:linear-gradient(155deg,#f8f1e6,#fffaf3 60%,#ead9c1);border-radius:15px}.hero-art{background:radial-gradient(circle,#fff8ec 0%,#f0e1ca 58%,#e5d1b4 59%,transparent 60%)}}
+</style>
+
+
+<style id="ultra-hd-interface-polish">
+/* Ultra-HD visual polish: preserves the Beige Luxury palette */
+:root{--detail-line:rgba(112,33,58,.10);--detail-shadow:0 18px 48px rgba(63,43,31,.09)}
+html{scroll-behavior:smooth;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-kerning:normal}
+img{max-width:100%;height:auto}
+button,input,select{ -webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #bd9858;outline-offset:3px}
+.topline{font-weight:600}
+.head{box-shadow:0 2px 14px rgba(70,40,30,.035)}
+.brand{letter-spacing:.15px}
+.brandmark{box-shadow:inset 0 0 0 3px rgba(255,255,255,.42),0 3px 12px rgba(91,55,35,.08)}
+.search input{min-height:46px;transition:border-color .2s,box-shadow .2s}
+.search input:focus{outline:none;border-color:#bd9858;box-shadow:0 0 0 3px rgba(189,152,88,.16)}
+.search button,.hero .primary,.product-actions button,.nav button{transition:background-color .2s,color .2s,transform .2s,box-shadow .2s}
+.search button:hover,.hero .primary:hover,.product-actions button:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(84,32,51,.16)}
+.hero{box-shadow:var(--detail-shadow);isolation:isolate}
+.hero:before{content:"";position:absolute;inset:12px;border:1px solid rgba(255,255,255,.48);pointer-events:none;z-index:0}
+.hero-copy{z-index:2}
+.hero-art{filter:saturate(1.04);transform:translateY(-50%) translateZ(0)}
+.jar-body,.art-sun,.hero-stamp{backface-visibility:hidden}
+.section-title{letter-spacing:.1px;text-wrap:balance}
+.category,.product{box-shadow:0 8px 26px rgba(63,43,31,.065);overflow:hidden}
+.category .pic,.product .pic{position:relative}
+.category .pic:after,.product .pic:after{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(112,33,58,.045)}
+.product .pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;image-rendering:auto;transform:translateZ(0)}
+.product h3{line-height:1.45;text-wrap:balance}
+.product .price{letter-spacing:.15px}
+.benefits{box-shadow:0 8px 26px rgba(63,43,31,.045)}
+.footer{position:relative}
+.footer:before{content:"";display:block;width:min(110px,22vw);height:1px;background:#bd9858;margin:0 auto 20px;opacity:.8}
+@media(min-width:1400px){
+ .hero,.section{max-width:1240px}
+ .hero{min-height:410px}
+ .product .pic{height:210px}
+ .section-title{font-size:36px}
+}
+@media(max-width:750px){
+ .hero:before{inset:8px}
+ .product .pic img{object-fit:cover}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*:before,*:after{transition:none!important;animation:none!important}
+}
+</style>
+<style id="visible-ultra-hd-redesign">
+/* Noticeable visual refinement while retaining Beige Luxury colors */
+:root{--wine:#60243a;--wine2:#82445a;--gold:#bd9858;--cream:#fbf5eb;--ink:#302721;--muted:#75685d;--line:#dfcfb8}
+body{background:#f6f0e7;color:#302721}
+.topline{padding:11px 14px;background:#4b1c30;font-size:12px;letter-spacing:1.1px}
+.head{padding:20px max(5%,calc((100% - 1240px)/2));background:#fffdf9;border-bottom:2px solid #dfcfb8;gap:28px}
+.brand{font-size:31px;letter-spacing:.2px}
+.brandmark{width:52px;height:52px;font-size:28px;border-width:2px;box-shadow:0 4px 15px #6d4b2b22}
+.search{max-width:490px}
+.search input{min-height:52px;border:1.5px solid #cdbb9f;border-radius:5px 0 0 5px;padding:14px 18px;font-size:15px}
+.search button{min-width:58px;border-radius:0 5px 5px 0;background:#60243a;font-size:17px}
+.quick{gap:22px}
+.quick button{font-size:13px;font-weight:600}
+.nav{background:#60243a;border:0;box-shadow:0 5px 16px #4b1c3022}
+.nav button{color:#fffaf1;padding:17px 27px;font-size:14px;font-weight:600;letter-spacing:.35px}
+.nav button:hover,.nav button.active{background:#bd9858;color:#321c1c}
+.hero{max-width:1240px;min-height:470px;margin:32px auto 54px;padding:58px 7%;border-radius:8px;background:linear-gradient(112deg,#f4e7d3 0%,#f9f1e5 48%,#dfc49e 100%);border:1px solid #d7c09d;box-shadow:0 20px 55px #4d321b20}
+.hero:before{inset:15px;border:1px solid #ffffffa8}
+.hero-copy{max-width:550px}
+.hero .eyebrow,.section-heading .eyebrow{font-size:12px;letter-spacing:4px;color:#916b34}
+.hero h1{font-size:clamp(42px,5vw,64px);line-height:1.06;letter-spacing:-1.4px;margin:20px 0}
+.hero p{font-size:17px;line-height:1.9;color:#5e4a3b;max-width:455px}
+.hero-actions{gap:22px;margin-top:30px}
+.hero .primary{padding:16px 27px;border-radius:5px;font-size:15px;font-weight:700;box-shadow:0 8px 20px #60243a28}
+.hero-art{width:410px;height:370px;right:7%;background:radial-gradient(circle,#fff6e6 0%,#ead4b4 57%,#d7b98f 58%,transparent 59%)}
+.art-sun{width:255px;height:255px;background:#fff4df;box-shadow:0 15px 45px #805b3228}
+.jam-jar{transform:scale(1.13);transform-origin:center}
+.hero-stamp{width:88px;height:88px;right:0;bottom:34px;border-width:2px;box-shadow:0 5px 16px #76512a22}
+.section{max-width:1240px;margin:58px auto;padding:0 24px}
+.section-title{font-size:39px;letter-spacing:-.5px;color:#542033}
+.section-subtitle{font-size:16px;color:#75685d;margin-bottom:30px}
+#categories .section-title{font-size:38px}
+.categories{gap:22px}
+.category{border:1px solid #d9c4a4;border-radius:7px;box-shadow:0 10px 28px #50351c16;background:#fff}
+.category .pic{height:155px;background:linear-gradient(145deg,#f4e5ce,#fff9ee);font-size:62px}
+.category strong{padding:18px 10px;font-size:21px;color:#60243a;background:#fff;border-top:1px solid #eee2d1}
+.products{gap:22px}
+.product{padding:14px 14px 20px;border:1px solid #dfcfb8;border-radius:7px;box-shadow:0 10px 28px #50351c14;background:#fff}
+.product .pic{height:225px;background:linear-gradient(145deg,#f5ead9,#fffaf2);border-radius:4px}
+.product h3{font-size:19px;line-height:1.5;margin:18px 3px 10px;color:#542033}
+.product .price{font-size:18px;color:#81512f;font-weight:700}
+.product .muted{font-size:13px}
+.product-actions{gap:9px;margin-top:17px}
+.product-actions button{padding:12px 15px;border-radius:4px;font-size:13px;font-weight:700}
+.product-actions .fav{border:1px solid #e4d4c1;background:#f7efe5}
+.benefits{padding:30px 20px;gap:18px;background:#eee2cf;border:1px solid #ddc9a9;border-radius:7px;box-shadow:0 10px 28px #50351c0e}
+.benefit{font-size:14px;line-height:1.7;color:#68533e}
+.benefit b{font-size:18px;color:#60243a}
+.footer{padding:48px 20px;background:#4b1c30;font-size:15px}
+.admin-entry{background:#4b1c30;padding:14px 20px;border-radius:5px}
+@media(min-width:1400px){.hero{min-height:500px}.product .pic{height:245px}.section{padding:0 12px}}
+@media(max-width:750px){
+ .head{padding:15px 16px;gap:14px}.brand{font-size:23px}.brandmark{width:43px;height:43px;font-size:23px}
+ .quick{gap:12px}.nav{box-shadow:0 3px 10px #4b1c3018}.nav button{padding:14px 17px;font-size:13px}
+ .hero{margin:16px 12px 36px;min-height:610px;padding:32px 25px 270px;border-radius:7px}
+ .hero h1{font-size:42px}.hero p{font-size:15px;line-height:1.8}
+ .hero-art{width:300px;height:265px;right:50%;bottom:-3px;top:auto;transform:translateX(50%)}
+ .art-sun{width:190px;height:190px}.jam-jar{transform:scale(.88);top:42px}
+ .hero-stamp{width:68px;height:68px;right:0;bottom:22px;font-size:15px}
+ .section{margin:42px auto;padding:0 14px}.section-title,#categories .section-title{font-size:31px}
+ .categories,.products{gap:13px}.category .pic{height:112px;font-size:48px}
+ .category strong{font-size:17px;padding:14px 5px}
+ .product{padding:9px 9px 14px}.product .pic{height:155px}
+ .product h3{font-size:16px;margin:13px 2px 8px}.product .price{font-size:16px}
+ .product-actions{gap:6px}.product-actions button{padding:10px 9px;font-size:11px}
+ .benefits{padding:20px 12px;gap:15px}.benefit b{font-size:16px}
+}
+@media(max-width:380px){.hero h1{font-size:36px}.product .pic{height:135px}}
+</style>
+<script src="storefront-enhancements.js"></script>
 </body></html>
