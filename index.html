@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="shop">
-<div class="topline">🚚 Livraison dans toute l'Algérie　 |　 ✓ Produits 100% naturels　 |　 🔒 Paiement à la livraison</div>
+<div class="topline">✓ Produits 100% naturels　 |　 📍 Retrait sur place　 |　 🔒 Paiement au retrait</div>
 <header class="head"><div class="brand"><div class="brandmark">🏡</div><div>Maison Délice<small style="display:block;font:12px Arial;color:#6c4a3c;text-align:center">Confitures Artisanales</small></div></div>
 <div class="search"><input placeholder="Rechercher un produit..."><button onclick="alert('Recherche de démonstration')">⌕</button></div>
 <div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="openCart()">🛒<br>Panier <span id="cartCount">0</span></button></div></header>
@@ -22,7 +22,7 @@
 <div class="category"><div class="pic">🍓🫙</div><strong>♧ Confitures</strong></div><div class="category"><div class="pic">🍪 🧁</div><strong>♜ Sucré</strong></div><div class="category"><div class="pic">🥧 🥪</div><strong>♨ Salé</strong></div><div class="category"><div class="pic">🥐 🥨</div><strong>♧ Viennoiserie</strong></div></div></section>
 <section class="section"><div class="section-title">Nos Produits Phares</div><div class="products">
 <div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
-<section class="section"><div class="benefits"><div class="benefit">🚚<b>Livraison rapide</b>Partout en Algérie</div><div class="benefit">🛡️<b>Paiement à la livraison</b>En toute sécurité</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
+<section class="section"><div class="benefits"><div class="benefit">📍<b>Retrait sur place</b>Commande préparée avec soin</div><div class="benefit">💳<b>Paiement au retrait</b>Simple et sécurisé</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
 <footer class="footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
 </div>
@@ -132,7 +132,8 @@ document.getElementById('checkoutForm').addEventListener('submit',async function
  if(!mdCart.length){msg.textContent='Votre panier est vide.';return;}
  button.disabled=true;msg.textContent='Vérification du stock et enregistrement de votre commande...';
  try{
-  const requestId=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('md-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+  if(!window.crypto||typeof window.crypto.randomUUID!=='function') throw new Error('Votre navigateur ne permet pas de sécuriser la commande. Actualisez la page ou utilisez un navigateur récent.');
+  const requestId=window.crypto.randomUUID();
   const payload={
    p_full_name:document.getElementById('checkoutName').value.trim(),
    p_phone:document.getElementById('checkoutPhone').value.trim(),
@@ -170,7 +171,7 @@ async function render(p){currentPage=p;const titles={dashboard:'Dashboard',produ
   } else if(p==='stock'){
    const prods=await loadProducts(true);host.innerHTML=`<div class="panel"><h3>État des stocks</h3><table class="order-table"><tr><th>Produit</th><th>Stock</th><th>État</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.stock??0}</td><td>${Number(x.stock)<=0?'Rupture':Number(x.stock)<10?'Stock faible':'Disponible'}</td></tr>`).join('')}</table></div>`;
   } else if(p==='settings'){
-   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Paiement à la livraison</p><p>Livraison : Toutes les wilayas d'Algérie</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
+   const {data,error}=await SUPA.from('store_settings').select('key,value').order('key');if(error)throw error;host.innerHTML=`<div class="panel"><h3>Paramètres de la boutique</h3><p>Nom : Maison Délice</p><p>Devise : Dinar algérien (DA)</p><p>Paiement : Au retrait de la commande</p><p>Réception : Retrait sur place uniquement</p><h4>Paramètres enregistrés</h4>${data.length?data.map(x=>`<p><b>${esc(x.key)}</b> : ${esc(JSON.stringify(x.value))}</p>`).join(''):'<p class="muted">Aucun paramètre personnalisé enregistré.</p>'}</div>`;
   }
  }catch(e){host.innerHTML=`<div class="panel"><b>Erreur de chargement</b><p class="muted">${esc(e.message||e)}</p></div>`;}
 }
@@ -180,7 +181,7 @@ async function saveProduct(e){e.preventDefault();const payload={name:document.ge
  if(cap){const {error:ve}=await SUPA.from('product_variants').insert({product_id:data.id,name:cap,weight:cap,price:vp===''?payload.price:Number(vp),stock:vs===''?payload.stock:Number(vs),active:true});if(ve){alert('Produit créé, mais la capacité n’a pas été enregistrée : '+ve.message);await render('products');return;}}
  alert('Produit ajouté avec succès.');await render('products');await renderShop();}
 async function addProductVariant(productId){const capacity=prompt('Saisissez la capacité (ex. 250g, 500g, 800g) :');if(!capacity||!capacity.trim())return;const priceRaw=prompt('Prix de cette capacité en DA :');if(priceRaw===null)return;const stockRaw=prompt('Stock disponible pour cette capacité :');if(stockRaw===null)return;const price=Number(priceRaw),stock=Number(stockRaw);if(!Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){alert('Prix ou stock invalide.');return;}const {error}=await SUPA.from('product_variants').insert({product_id:productId,name:capacity.trim(),weight:capacity.trim(),price,stock,active:true});if(error){alert('Impossible d’ajouter la capacité : '+error.message);return;}alert('Capacité ajoutée.');await render('products');await renderShop();}
-function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Livraison</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>${money(x.delivery_fee)}</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
+function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Réception</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>Retrait sur place</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
 (async()=>{await renderShop();updateCartCount();const {data}=await SUPA.auth.getSession();if(data.session){try{currentUser=await verifyAdmin(data.session.user)}catch(_){await SUPA.auth.signOut()}}})();
 </script>
 </body></html>
