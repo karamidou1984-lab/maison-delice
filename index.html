@@ -189,6 +189,14 @@ async function updateOrderStatus(orderId,nextStatus){
  if(error){alert('Impossible de modifier le statut : '+error.message);return;}
  await render(currentPage);
 }
+async function cancelOrder(orderId){
+ if(!confirm('Confirmer l’annulation de la commande #'+orderId+' ? Les quantités seront automatiquement réintégrées au stock.'))return;
+ const {data,error}=await SUPA.rpc('cancel_store_order',{p_order_id:Number(orderId)});
+ if(error){alert('Annulation impossible : '+error.message);return;}
+ if(!data||data.success!==true){alert('L’annulation n’a pas été confirmée.');return;}
+ alert(data.already_cancelled?'Cette commande était déjà annulée.':'Commande annulée. Le stock a été réintégré.');
+ await render(currentPage);
+}
 async function openOrderDetails(orderId){
  const box=document.getElementById('orderDetails');if(!box)return;
  box.innerHTML='<div class="panel" style="margin:12px 0">Chargement des détails…</div>';
@@ -209,12 +217,13 @@ async function openOrderDetails(orderId){
   <p><b>Date :</b> ${o.created_at?new Date(o.created_at).toLocaleString('fr-DZ'):'—'}</p>
   <p><b>Réception :</b> Retrait sur place</p>
   <p><b>Note du client :</b> ${esc(o.customer_note||'Aucune note')}</p>
+  ${o.status!=='cancelled'&&o.status!=='completed'?`<div class="admin-actions" style="margin:12px 0"><button class="blackbtn" style="background:#a52a3a;color:white" onclick="cancelOrder(${o.id})">Annuler la commande</button></div>`:o.status==='cancelled'?'<p style="color:#a52a3a;font-weight:700">Commande annulée · Stock réintégré</p>':''}
   <div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Format</th><th>Quantité</th><th>Prix unitaire</th><th>Sous-total</th></tr>${items.map(x=>`<tr><td>${esc(x.products?.name||'Produit')}</td><td>${esc(x.capacity_snapshot||'—')}</td><td>${x.quantity}</td><td>${money(x.unit_price)}</td><td>${money(Number(x.unit_price)*Number(x.quantity))}</td></tr>`).join('')}</table></div>
   <p style="text-align:right;font-size:18px;color:#720d2b"><b>Total : ${money(o.total)}</b></p>
  </div>`;
  box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Téléphone</th><th>Total</th><th>Réception</th><th>Statut</th><th>Date</th><th>Action</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||'—')}</td><td>${x.customers?.phone?`<a href="tel:${esc(x.customers.phone)}">${esc(x.customers.phone)}</a>`:'—'}</td><td>${money(x.total)}</td><td>Retrait sur place</td><td><select aria-label="Statut commande ${x.id}" onchange="updateOrderStatus(${x.id},this.value)" style="max-width:145px;padding:6px;border:1px solid #ddd;border-radius:8px">${ORDER_STATUSES.map(st=>`<option value="${st[0]}" ${x.status===st[0]?'selected':''}>${st[1]}</option>`).join('')}${!ORDER_STATUSES.some(st=>st[0]===x.status)?`<option selected value="${esc(x.status)}">${esc(x.status)}</option>`:''}</select></td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td><td><button class="blackbtn" onclick="openOrderDetails(${x.id})">Détails</button></td></tr>`).join('')}</table>`}
+function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Téléphone</th><th>Total</th><th>Réception</th><th>Statut</th><th>Date</th><th>Action</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||'—')}</td><td>${x.customers?.phone?`<a href="tel:${esc(x.customers.phone)}">${esc(x.customers.phone)}</a>`:'—'}</td><td>${money(x.total)}</td><td>Retrait sur place</td><td>${x.status==='cancelled'?'<span style="color:#a52a3a;font-weight:700">Annulée</span>':`<select aria-label="Statut commande ${x.id}" onchange="updateOrderStatus(${x.id},this.value)" style="max-width:145px;padding:6px;border:1px solid #ddd;border-radius:8px">${ORDER_STATUSES.map(st=>`<option value="${st[0]}" ${x.status===st[0]?'selected':''}>${st[1]}</option>`).join('')}${!ORDER_STATUSES.some(st=>st[0]===x.status)?`<option selected value="${esc(x.status)}">${esc(x.status)}</option>`:''}</select>`}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td><td><button class="blackbtn" onclick="openOrderDetails(${x.id})">Détails</button></td></tr>`).join('')}</table>`}
 (async()=>{await renderShop();updateCartCount();const {data}=await SUPA.auth.getSession();if(data.session){try{currentUser=await verifyAdmin(data.session.user)}catch(_){await SUPA.auth.signOut()}}})();
 </script>
 </body></html>
