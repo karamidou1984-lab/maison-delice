@@ -27,7 +27,22 @@
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
 </div>
 
-<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">La validation de commande sera ajoutée après vérification du système de commandes.</p></div></div>
+<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Paiement à la livraison. Le stock sera vérifié au moment de l’envoi.</p></div></div>
+<div id="checkoutModal" class="cart-modal" onclick="if(event.target===this)closeCheckout()"><div class="cart-panel">
+ <h2>Finaliser votre commande</h2>
+ <p class="muted">Paiement à la livraison</p>
+ <form id="checkoutForm" style="display:grid;gap:10px">
+  <label>Nom et prénom<input id="checkoutName" required maxlength="120" autocomplete="name" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <label>Téléphone<input id="checkoutPhone" required maxlength="40" type="tel" autocomplete="tel" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <label>Wilaya<input id="checkoutWilaya" required maxlength="100" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <label>Commune<input id="checkoutCommune" required maxlength="120" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <label>Adresse de livraison<input id="checkoutAddress" required maxlength="250" autocomplete="street-address" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <label>Note (facultatif)<textarea id="checkoutNote" maxlength="1000" rows="3" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></textarea></label>
+  <div id="checkoutMessage" class="muted" role="status"></div>
+  <button class="primary" type="submit" id="submitOrderButton">Confirmer la commande</button>
+  <button type="button" class="back" onclick="closeCheckout()">Retour au panier</button>
+ </form>
+</div></div>
 <div id="authModal" style="display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:center;justify-content:center;padding:18px">
  <div style="background:#fff;border-radius:16px;padding:24px;width:min(420px,100%);box-shadow:0 15px 50px #0003">
   <h2 style="color:#720d2b;margin-top:0">Connexion administrateur</h2>
@@ -111,6 +126,34 @@ function changeCartQty(key,delta){var x=mdCart.find(function(v){return v.key===k
 function setCartQty(key,raw){var x=mdCart.find(function(v){return v.key===key;});if(!x)return;var n=Number(raw);if(!Number.isInteger(n)||n<1||n>x.stock){alert('Saisissez une quantité entière entre 1 et '+x.stock+'.');renderCart();return;}x.qty=n;saveCart();renderCart();}
 function removeCartItem(key){mdCart=mdCart.filter(function(x){return x.key!==key;});saveCart();renderCart();}
 function clearCart(){mdCart=[];saveCart();renderCart();}
+function openCheckout(){if(!mdCart.length){alert('Votre panier est vide.');return;}closeCart();document.getElementById('checkoutMessage').textContent='';document.getElementById('checkoutModal').style.display='flex';}
+function closeCheckout(){document.getElementById('checkoutModal').style.display='none';}
+document.getElementById('checkoutForm').addEventListener('submit',async function(e){
+ e.preventDefault();
+ const button=document.getElementById('submitOrderButton'),msg=document.getElementById('checkoutMessage');
+ if(!mdCart.length){msg.textContent='Votre panier est vide.';return;}
+ button.disabled=true;msg.textContent='Vérification du stock et enregistrement de votre commande...';
+ try{
+  const requestId=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('md-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+  const payload={
+   p_full_name:document.getElementById('checkoutName').value.trim(),
+   p_phone:document.getElementById('checkoutPhone').value.trim(),
+   p_items:mdCart.map(x=>({product_id:Number(x.productId),variant_id:x.variantId===null?null:Number(x.variantId),quantity:Number(x.qty)})),
+   p_request_id:requestId,
+   p_customer_note:document.getElementById('checkoutNote').value.trim()||null,
+   p_address:document.getElementById('checkoutAddress').value.trim(),
+   p_wilaya:document.getElementById('checkoutWilaya').value.trim(),
+   p_commune:document.getElementById('checkoutCommune').value.trim()
+  };
+  if(payload.p_items.some(x=>!x.variant_id)){throw new Error('Un format de produit n’est plus valide. Actualisez la boutique puis réessayez.');}
+  const {data,error}=await SUPA.rpc('create_store_order_with_delivery',payload);
+  if(error)throw error;
+  if(!data||data.success!==true)throw new Error('La commande n’a pas pu être confirmée.');
+  mdCart=[];saveCart();renderCart();closeCheckout();
+  alert('Merci ! Votre commande n°'+data.order_id+' est enregistrée. Notre équipe vous contactera pour confirmer la livraison.');
+ }catch(err){msg.textContent=err.message||'Erreur lors de la commande. Vérifiez vos informations et réessayez.';}
+ finally{button.disabled=false;}
+});
 
 async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
 async function render(p){currentPage=p;const titles={dashboard:'Dashboard',products:'Produits',orders:'Commandes',customers:'Clients',stock:'Stocks',settings:'Paramètres'};document.getElementById('pageTitle').textContent=titles[p]||p;const host=document.getElementById('pageContent');host.innerHTML='<div class="panel">Chargement des données...</div>';
