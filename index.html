@@ -155,16 +155,16 @@ async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach
 async function render(p){currentPage=p;const titles={dashboard:'Dashboard',products:'Produits',orders:'Commandes',customers:'Clients',stock:'Stocks',settings:'Paramètres'};document.getElementById('pageTitle').textContent=titles[p]||p;const host=document.getElementById('pageContent');host.innerHTML='<div class="panel">Chargement des données...</div>';
  try{
   if(p==='dashboard'){
-   const [{data:orders,error:oe},{data:customers,error:ce},prods]=await Promise.all([SUPA.from('orders').select('id,total,status,created_at'),SUPA.from('customers').select('id'),loadProducts(true)]);
+   const [{data:orders,error:oe},{data:customers,error:ce},prods]=await Promise.all([SUPA.from('orders').select('id,customer_id,total,status,created_at,customers(name,phone)').order('created_at',{ascending:false}),SUPA.from('customers').select('id'),loadProducts(true)]);
    if(oe)throw oe;if(ce)throw ce;const revenue=(orders||[]).reduce((s,o)=>s+Number(o.total||0),0);
-   host.innerHTML=`<div class="stats"><div class="stat"><small>Chiffre d'affaires</small><strong>${money(revenue)}</strong><span class="muted">Total des commandes enregistrées</span></div><div class="stat"><small>Commandes</small><strong>${orders.length}</strong><span class="muted">Base de données</span></div><div class="stat"><small>Produits</small><strong>${prods.length}</strong><span class="muted">Catalogue</span></div><div class="stat"><small>Clients</small><strong>${customers.length}</strong><span class="muted">Clients enregistrés</span></div></div><div class="panel content-panel"><h3>Dernières commandes</h3>${orders.length?orderTable(orders.slice(-8).reverse()):'<p class="muted">Aucune commande pour le moment.</p>'}</div>`;
+   host.innerHTML=`<div class="stats"><div class="stat"><small>Chiffre d'affaires</small><strong>${money(revenue)}</strong><span class="muted">Total des commandes enregistrées</span></div><div class="stat"><small>Commandes</small><strong>${orders.length}</strong><span class="muted">Base de données</span></div><div class="stat"><small>Produits</small><strong>${prods.length}</strong><span class="muted">Catalogue</span></div><div class="stat"><small>Clients</small><strong>${customers.length}</strong><span class="muted">Clients enregistrés</span></div></div><div class="panel content-panel"><h3>Dernières commandes</h3>${orders.length?`<div id="orderDetails"></div>${orderTable(orders.slice(0,8))}`:'<p class="muted">Aucune commande pour le moment.</p>'}</div>`;
   } else if(p==='products'){
    const [prods,cats]=await Promise.all([loadProducts(true),loadCategories()]);
    host.innerHTML=`<div class="panel"><h3>Catalogue produits</h3><div class="admin-actions"><button onclick="document.getElementById('newProduct').style.display='grid'">+ Ajouter un produit</button></div><form id="newProduct" style="display:none;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:12px 0"><input id="pn" placeholder="Nom du produit" required><input id="pref" placeholder="Référence"><input id="pp" type="number" min="0" step="0.01" placeholder="Prix DA" required><input id="ps" type="number" min="0" step="1" placeholder="Stock" required><select id="pc" required><option value="">Catégorie</option>${cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="pdesc" placeholder="Description"><input id="pcap" placeholder="Première capacité (ex. 500g)"><input id="pvp" type="number" min="0" step="0.01" placeholder="Prix de cette capacité"><input id="pvs" type="number" min="0" step="1" placeholder="Stock de cette capacité"><button class="blackbtn" type="submit">Enregistrer</button></form><div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Formats / capacités</th><th>Prix de base</th><th>Stock total</th><th>Catégorie</th><th>Action</th></tr>${prods.map(x=>`<tr><td>${esc(x.name)}</td><td>${(x.variants||[]).length?(x.variants||[]).map(v=>`${esc(v.weight||v.name)} — ${money(v.price)} (${v.stock} en stock)`).join('<br>'):'Aucun format'}</td><td>${money(x.price)}</td><td>${x.stock??0}</td><td>${esc(cats.find(c=>c.id===x.category_id)?.name||'—')}</td><td><button class="blackbtn" onclick="addProductVariant(${x.id})">+ Capacité</button></td></tr>`).join('')}</table></div></div>`;
    document.getElementById('newProduct').addEventListener('submit',saveProduct);
   } else if(p==='orders'){
-   const {data,error}=await SUPA.from('orders').select('id,customer_id,status,total,delivery_fee,created_at,customers(name,phone)').order('created_at',{ascending:false});if(error)throw error;
-   host.innerHTML=`<div class="panel"><h3>Commandes</h3>${data.length?`<div style="overflow:auto">${orderTable(data)}</div>`:'<p class="muted">Aucune commande enregistrée.</p>'}</div>`;
+   const {data,error}=await SUPA.from('orders').select('id,customer_id,status,total,delivery_fee,created_at,customer_note,customers(name,phone)').order('created_at',{ascending:false});if(error)throw error;
+   host.innerHTML=`<div class="panel"><h3>Gestion des commandes</h3><p class="muted">Consultez les coordonnées, le contenu et les notes de chaque commande. Vous pouvez faire évoluer son statut au fur et à mesure de la préparation.</p><div class="admin-actions"><button onclick="render('orders')">↻ Actualiser</button></div><div id="orderDetails"></div>${data.length?`<div style="overflow:auto">${orderTable(data)}</div>`:'<p class="muted">Aucune commande enregistrée.</p>'}</div>`;
   } else if(p==='customers'){
    const {data,error}=await SUPA.from('customers').select('id,name,phone,wilaya,commune,created_at').order('created_at',{ascending:false});if(error)throw error;
    host.innerHTML=`<div class="panel"><h3>Clients</h3>${data.length?`<div style="overflow:auto"><table class="order-table"><tr><th>Nom</th><th>Téléphone</th><th>Wilaya</th><th>Commune</th></tr>${data.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.wilaya)}</td><td>${esc(x.commune)}</td></tr>`).join('')}</table></div>`:'<p class="muted">Aucun client enregistré.</p>'}</div>`;
@@ -181,7 +181,36 @@ async function saveProduct(e){e.preventDefault();const payload={name:document.ge
  if(cap){const {error:ve}=await SUPA.from('product_variants').insert({product_id:data.id,name:cap,weight:cap,price:vp===''?payload.price:Number(vp),stock:vs===''?payload.stock:Number(vs),active:true});if(ve){alert('Produit créé, mais la capacité n’a pas été enregistrée : '+ve.message);await render('products');return;}}
  alert('Produit ajouté avec succès.');await render('products');await renderShop();}
 async function addProductVariant(productId){const capacity=prompt('Saisissez la capacité (ex. 250g, 500g, 800g) :');if(!capacity||!capacity.trim())return;const priceRaw=prompt('Prix de cette capacité en DA :');if(priceRaw===null)return;const stockRaw=prompt('Stock disponible pour cette capacité :');if(stockRaw===null)return;const price=Number(priceRaw),stock=Number(stockRaw);if(!Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){alert('Prix ou stock invalide.');return;}const {error}=await SUPA.from('product_variants').insert({product_id:productId,name:capacity.trim(),weight:capacity.trim(),price,stock,active:true});if(error){alert('Impossible d’ajouter la capacité : '+error.message);return;}alert('Capacité ajoutée.');await render('products');await renderShop();}
-function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Total</th><th>Réception</th><th>Statut</th><th>Date</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||x.customer_id||'—')}</td><td>${money(x.total)}</td><td>Retrait sur place</td><td>${esc(x.status||'—')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td></tr>`).join('')}</table>`}
+const ORDER_STATUSES=[['pending','En attente'],['confirmed','Confirmée'],['preparing','En préparation'],['ready','Prête au retrait'],['completed','Terminée']];
+function orderStatusLabel(status){const found=ORDER_STATUSES.find(x=>x[0]===status);return found?found[1]:(status||'—');}
+async function updateOrderStatus(orderId,nextStatus){
+ if(!ORDER_STATUSES.some(x=>x[0]===nextStatus)){alert('Statut non reconnu.');return;}
+ const {error}=await SUPA.from('orders').update({status:nextStatus}).eq('id',orderId);
+ if(error){alert('Impossible de modifier le statut : '+error.message);return;}
+ await render(currentPage);
+}
+async function openOrderDetails(orderId){
+ const box=document.getElementById('orderDetails');if(!box)return;
+ box.innerHTML='<div class="panel" style="margin:12px 0">Chargement des détails…</div>';
+ const [{data:o,error:oe},{data:items,error:ie}]=await Promise.all([
+  SUPA.from('orders').select('id,status,total,created_at,customer_note,customers(name,phone)').eq('id',orderId).single(),
+  SUPA.from('order_items').select('quantity,unit_price,capacity_snapshot,products(name)').eq('order_id',orderId)
+ ]);
+ if(oe||ie){box.innerHTML='<div class="panel" style="margin:12px 0">Impossible de charger les détails : '+esc((oe||ie).message)+'</div>';return;}
+ const phone=o.customers?.phone||'';
+ box.innerHTML=`<div class="panel" style="margin:12px 0;background:#fffaf2;border-color:#d9c79f">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Détails de la commande #${o.id}</h3><button class="back" onclick="document.getElementById('orderDetails').innerHTML=''">Fermer</button></div>
+  <p><b>Client :</b> ${esc(o.customers?.name||'—')}</p>
+  <p><b>Téléphone :</b> ${phone?`<a href="tel:${esc(phone)}">${esc(phone)}</a>`:'—'}</p>
+  <p><b>Date :</b> ${o.created_at?new Date(o.created_at).toLocaleString('fr-DZ'):'—'}</p>
+  <p><b>Réception :</b> Retrait sur place</p>
+  <p><b>Note du client :</b> ${esc(o.customer_note||'Aucune note')}</p>
+  <div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Format</th><th>Quantité</th><th>Prix unitaire</th><th>Sous-total</th></tr>${items.map(x=>`<tr><td>${esc(x.products?.name||'Produit')}</td><td>${esc(x.capacity_snapshot||'—')}</td><td>${x.quantity}</td><td>${money(x.unit_price)}</td><td>${money(Number(x.unit_price)*Number(x.quantity))}</td></tr>`).join('')}</table></div>
+  <p style="text-align:right;font-size:18px;color:#720d2b"><b>Total : ${money(o.total)}</b></p>
+ </div>`;
+ box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function orderTable(rows){return `<table class="order-table"><tr><th>N°</th><th>Client</th><th>Téléphone</th><th>Total</th><th>Réception</th><th>Statut</th><th>Date</th><th>Action</th></tr>${rows.map(x=>`<tr><td>#${x.id}</td><td>${esc(x.customers?.name||'—')}</td><td>${x.customers?.phone?`<a href="tel:${esc(x.customers.phone)}">${esc(x.customers.phone)}</a>`:'—'}</td><td>${money(x.total)}</td><td>Retrait sur place</td><td><select aria-label="Statut commande ${x.id}" onchange="updateOrderStatus(${x.id},this.value)" style="max-width:145px;padding:6px;border:1px solid #ddd;border-radius:8px">${ORDER_STATUSES.map(st=>`<option value="${st[0]}" ${x.status===st[0]?'selected':''}>${st[1]}</option>`).join('')}${!ORDER_STATUSES.some(st=>st[0]===x.status)?`<option selected value="${esc(x.status)}">${esc(x.status)}</option>`:''}</select></td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('fr-DZ'):'—'}</td><td><button class="blackbtn" onclick="openOrderDetails(${x.id})">Détails</button></td></tr>`).join('')}</table>`}
 (async()=>{await renderShop();updateCartCount();const {data}=await SUPA.auth.getSession();if(data.session){try{currentUser=await verifyAdmin(data.session.user)}catch(_){await SUPA.auth.signOut()}}})();
 </script>
 </body></html>
