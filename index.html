@@ -198,10 +198,14 @@ async function openOrderDetails(orderId){
  ]);
  if(oe||ie){box.innerHTML='<div class="panel" style="margin:12px 0">Impossible de charger les détails : '+esc((oe||ie).message)+'</div>';return;}
  const phone=o.customers?.phone||'';
+ const waDigits=phone.replace(/\\D/g,'');
+ const waPhone=waDigits?(waDigits.startsWith('0')?'213'+waDigits.slice(1):waDigits.startsWith('213')?waDigits:'213'+waDigits):'';
+ const waUrl=waPhone?'https://wa.me/'+waPhone+'?text='+encodeURIComponent('Bonjour, concernant votre commande Maison Délice n°'+o.id+'.'):'';
  box.innerHTML=`<div class="panel" style="margin:12px 0;background:#fffaf2;border-color:#d9c79f">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Détails de la commande #${o.id}</h3><button class="back" onclick="document.getElementById('orderDetails').innerHTML=''">Fermer</button></div>
   <p><b>Client :</b> ${esc(o.customers?.name||'—')}</p>
   <p><b>Téléphone :</b> ${phone?`<a href="tel:${esc(phone)}">${esc(phone)}</a>`:'—'}</p>
+  ${phone?`<div class="admin-actions"><a class="blackbtn" style="display:inline-block;text-decoration:none;background:#16845b" href="${esc(waUrl)}" target="_blank" rel="noopener noreferrer">WhatsApp · Contacter le client</a></div>`:''}
   <p><b>Date :</b> ${o.created_at?new Date(o.created_at).toLocaleString('fr-DZ'):'—'}</p>
   <p><b>Réception :</b> Retrait sur place</p>
   <p><b>Note du client :</b> ${esc(o.customer_note||'Aucune note')}</p>
