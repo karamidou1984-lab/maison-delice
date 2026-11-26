@@ -27,16 +27,14 @@
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
 </div>
 
-<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Paiement à la livraison. Le stock sera vérifié au moment de l’envoi.</p></div></div>
+<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Retrait sur place · Paiement au retrait. Le stock sera vérifié lors de la commande.</p></div></div>
 <div id="checkoutModal" class="cart-modal" onclick="if(event.target===this)closeCheckout()"><div class="cart-panel">
  <h2>Finaliser votre commande</h2>
- <p class="muted">Paiement à la livraison</p>
+ <p class="muted">Paiement au retrait de votre commande</p>
  <form id="checkoutForm" style="display:grid;gap:10px">
   <label>Nom et prénom<input id="checkoutName" required maxlength="120" autocomplete="name" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
   <label>Téléphone<input id="checkoutPhone" required maxlength="40" type="tel" autocomplete="tel" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
-  <label>Wilaya<input id="checkoutWilaya" required maxlength="100" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
-  <label>Commune<input id="checkoutCommune" required maxlength="120" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
-  <label>Adresse de livraison<input id="checkoutAddress" required maxlength="250" autocomplete="street-address" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
+  <div class="panel" style="padding:12px;background:#fff7e9"><b>Mode de réception : Retrait sur place</b><p class="muted" style="margin-bottom:0">Votre commande sera préparée. Nous vous contacterons pour convenir du retrait.</p></div>
   <label>Note (facultatif)<textarea id="checkoutNote" maxlength="1000" rows="3" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></textarea></label>
   <div id="checkoutMessage" class="muted" role="status"></div>
   <button class="primary" type="submit" id="submitOrderButton">Confirmer la commande</button>
@@ -140,17 +138,14 @@ document.getElementById('checkoutForm').addEventListener('submit',async function
    p_phone:document.getElementById('checkoutPhone').value.trim(),
    p_items:mdCart.map(x=>({product_id:Number(x.productId),variant_id:x.variantId===null?null:Number(x.variantId),quantity:Number(x.qty)})),
    p_request_id:requestId,
-   p_customer_note:document.getElementById('checkoutNote').value.trim()||null,
-   p_address:document.getElementById('checkoutAddress').value.trim(),
-   p_wilaya:document.getElementById('checkoutWilaya').value.trim(),
-   p_commune:document.getElementById('checkoutCommune').value.trim()
+   p_customer_note:document.getElementById('checkoutNote').value.trim()||null
   };
   if(payload.p_items.some(x=>!x.variant_id)){throw new Error('Un format de produit n’est plus valide. Actualisez la boutique puis réessayez.');}
-  const {data,error}=await SUPA.rpc('create_store_order_with_delivery',payload);
+  const {data,error}=await SUPA.rpc('create_store_order',payload);
   if(error)throw error;
   if(!data||data.success!==true)throw new Error('La commande n’a pas pu être confirmée.');
   mdCart=[];saveCart();renderCart();closeCheckout();
-  alert('Merci ! Votre commande n°'+data.order_id+' est enregistrée. Notre équipe vous contactera pour confirmer la livraison.');
+  alert('Merci ! Votre commande n°'+data.order_id+' est enregistrée. Notre équipe vous contactera pour convenir du retrait sur place.');
  }catch(err){msg.textContent=err.message||'Erreur lors de la commande. Vérifiez vos informations et réessayez.';}
  finally{button.disabled=false;}
 });
