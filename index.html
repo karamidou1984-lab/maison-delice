@@ -73,11 +73,18 @@ async function loadCategories(){
  if(error) throw error; categoriesCache=data||[]; return categoriesCache;
 }
 async function loadProducts(admin=false){
- let q=SUPA.from('products').select('id,name,reference,description,price,stock,category_id,active,is_active').order('id',{ascending:false});
+ let q=SUPA.from('products').select('id,name,reference,description,price,stock,capacity,category_id,active,is_active').order('id',{ascending:false});
  if(!admin) q=q.eq('is_active',true);
  const {data,error}=await q; if(error) throw error; productsCache=data||[];
  const ids=productsCache.map(p=>p.id);
- if(ids.length){const {data:imgs,error:ie}=await SUPA.from('product_images').select('product_id,image_url,is_primary,position').in('product_id',ids).order('position'); if(!ie){for(const p of productsCache){const found=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>Number(b.is_primary)-Number(a.is_primary))[0];p.image_url=found?.image_url||'';}}}
+ if(ids.length){
+  const [{data:imgs,error:ie},{data:variants,error:ve}]=await Promise.all([
+   SUPA.from('product_images').select('product_id,image_url,is_primary,position').in('product_id',ids).order('position'),
+   SUPA.from('product_variants').select('id,product_id,name,weight,price,stock,active').in('product_id',ids).eq('active',true).order('id')
+  ]);
+  if(ve) throw ve;
+  for(const p of productsCache){p.variants=(variants||[]).filter(v=>Number(v.product_id)===Number(p.id));if(!ie){const found=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>Number(b.is_primary)-Number(a.is_primary))[0];p.image_url=found?.image_url||'';}}
+ }
  return productsCache;
 }
 async function renderShop(){
@@ -86,9 +93,10 @@ async function renderShop(){
   const catBox=document.querySelector('#categories .categories');
   if(catBox) catBox.innerHTML=cats.map((c,i)=>`<div class="category"><div class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</div><strong>${esc(c.name)}</strong></div>`).join('');
   const productBox=document.querySelector('.section .products');
-  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>`<div class="product"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><small class="muted">${Number(p.stock)>0?'Disponible':'Rupture de stock'}</small></div>`).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
+  if(productBox) productBox.innerHTML=prods.length?prods.map(p=>{const vs=p.variants||[];const first=vs[0];const fallback={id:'base',name:p.capacity||'Format standard',weight:p.capacity||'',price:p.price,stock:p.stock};const opts=vs.length?vs:[fallback];const chosen=opts.find(v=>Number(v.stock)>0)||opts[0];return `<div class="product" data-product="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><label class="muted" for="variant-${p.id}">Choisir le format</label><select id="variant-${p.id}" class="variant-select" onchange="updateVariantCard(${p.id},this.value)">${opts.map(v=>`<option value="${v.id}" data-price="${v.price}" data-stock="${v.stock}" ${String(v.id)===String(chosen.id)?'selected':''}>${esc(v.weight||v.name||'Format standard')} — ${money(v.price)}</option>`).join('')}</select><div class="price variant-price" id="variant-price-${p.id}">${money(chosen.price)}</div><small class="muted variant-stock" id="variant-stock-${p.id}">${Number(chosen.stock)>0?'Disponible ('+Number(chosen.stock)+' en stock)':'Rupture de stock'}</small></div>`}).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">Les produits seront bientôt disponibles.</p>';
  }catch(e){console.error(e);}
 }
+function updateVariantCard(productId,variantId){const sel=document.getElementById('variant-'+productId);const opt=sel?.selectedOptions?.[0];if(!opt)return;const price=document.getElementById('variant-price-'+productId),stock=document.getElementById('variant-stock-'+productId);if(price)price.textContent=money(opt.dataset.price);if(stock){const n=Number(opt.dataset.stock);stock.textContent=n>0?'Disponible ('+n+' en stock)':'Rupture de stock';}}
 async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach(x=>x.classList.remove('active'));b.classList.add('active')} await render(p)}
 async function render(p){currentPage=p;const titles={dashboard:'Dashboard',products:'Produits',orders:'Commandes',customers:'Clients',stock:'Stocks',settings:'Paramètres'};document.getElementById('pageTitle').textContent=titles[p]||p;const host=document.getElementById('pageContent');host.innerHTML='<div class="panel">Chargement des données...</div>';
  try{
