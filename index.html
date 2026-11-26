@@ -23,8 +23,8 @@
 <section class="section" id="category-page" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div class="section-title" id="categoryPageTitle" style="margin:12px 0">Catégorie</div><button type="button" class="back" onclick="showShopHome()">← Retour aux catégories</button></div><div class="products" id="categoryPageProducts"></div></section>
 <section class="section" id="products-section"><div class="section-title" id="shopProductsTitle">Nos Produits Phares</div><div class="products">
 <div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
-<section class="section"><div class="benefits"><div class="benefit">📍<b>Retrait sur place</b>Commande préparée avec soin</div><div class="benefit">💳<b>Paiement au retrait</b>Simple et sécurisé</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
-<footer class="footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
+<section class="section" id="shop-benefits"><div class="benefits"><div class="benefit">📍<b>Retrait sur place</b>Commande préparée avec soin</div><div class="benefit">💳<b>Paiement au retrait</b>Simple et sécurisé</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
+<footer class="footer" id="shop-footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
 <button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
 </div>
 
@@ -126,14 +126,14 @@ function showCategoryProducts(categoryId){
  const category=categoriesCache.find(c=>Number(c.id)===Number(categoryId));
  if(!category)return;
  selectedShopCategoryId=Number(categoryId);categoryPageActive=true;
- const hero=document.getElementById('shop-hero'),cats=document.getElementById('categories'),products=document.getElementById('products-section'),page=document.getElementById('category-page');
- if(hero)hero.hidden=true;if(cats)cats.hidden=true;if(products)products.hidden=true;if(page)page.hidden=false;
+ const hero=document.getElementById('shop-hero'),cats=document.getElementById('categories'),products=document.getElementById('products-section'),page=document.getElementById('category-page'),benefits=document.getElementById('shop-benefits'),footer=document.getElementById('shop-footer');
+ if(hero)hero.hidden=true;if(cats)cats.hidden=true;if(products)products.hidden=true;if(benefits)benefits.hidden=true;if(footer)footer.hidden=true;if(page)page.hidden=false;
  renderShopProducts();window.scrollTo({top:0,behavior:'smooth'});
 }
 function showShopHome(){
  categoryPageActive=false;selectedShopCategoryId=null;
- const hero=document.getElementById('shop-hero'),cats=document.getElementById('categories'),products=document.getElementById('products-section'),page=document.getElementById('category-page');
- if(hero)hero.hidden=false;if(cats)cats.hidden=false;if(products)products.hidden=false;if(page)page.hidden=true;
+ const hero=document.getElementById('shop-hero'),cats=document.getElementById('categories'),products=document.getElementById('products-section'),page=document.getElementById('category-page'),benefits=document.getElementById('shop-benefits'),footer=document.getElementById('shop-footer');
+ if(hero)hero.hidden=false;if(cats)cats.hidden=false;if(products)products.hidden=false;if(benefits)benefits.hidden=false;if(footer)footer.hidden=false;if(page)page.hidden=true;
  renderShopProducts();window.scrollTo({top:0,behavior:'smooth'});
 }
 function showAllShopProducts(){showShopHome();}
