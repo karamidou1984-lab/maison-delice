@@ -144,7 +144,7 @@ async function startOrderMonitoring(){
     toast.innerHTML='<strong>Nouvelle commande reçue !</strong><span>Commande #'+esc(order.id)+' · '+money(order.total)+'</span><br><button type="button">Voir les commandes</button>';
     toast.querySelector('button').addEventListener('click',()=>{toast.remove();const btn=[...document.querySelectorAll('.sidebtn')].find(x=>x.textContent.includes('Commandes'));showPage('orders',btn);});
     document.body.appendChild(toast);setTimeout(()=>toast.remove(),20000);
-    if('Notification' in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){
+    if('Notification' in window&&Notification.permission==='granted'){
      try{
       const registration=window.__mdOrderNotificationRegistration||await navigator.serviceWorker.ready;
       await registration.showNotification('Nouvelle commande Maison Délice',{body:'Commande #'+order.id+' · '+money(order.total),tag:'md-order-'+order.id,data:{url:'/'}});
