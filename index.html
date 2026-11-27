@@ -20,10 +20,11 @@
 <header class="head"><div class="brand"><div class="brandmark">🏡</div><div>Maison Délice<small style="display:block;font:12px Arial;color:#6c4a3c;text-align:center">Confitures Artisanales</small></div></div>
 <div class="search"><input id="shopSearchInput" type="search" placeholder="Rechercher un produit..." aria-label="Rechercher un produit" oninput="applyShopSearch()" onkeydown="if(event.key==='Enter')applyShopSearch()"><button type="button" aria-label="Lancer la recherche" onclick="applyShopSearch()">⌕</button></div>
 <div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="openCart()">🛒<br>Panier <span id="cartCount">0</span></button></div></header>
-<nav class="nav"><button class="active" onclick="showShopHome()">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button>Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
+<nav class="nav"><button class="active" onclick="showShopHome()">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button type="button" onclick="showShopPromotions()">Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
 <section class="hero" id="shop-hero"><div class="hero-copy"><div class="eyebrow">L'ART DU FAIT MAISON</div><h1>Des confitures artisanales au goût authentique</h1><p>Des créations gourmandes préparées avec passion, pour apporter une touche d'authenticité à vos moments précieux.</p><button class="primary" onclick="document.getElementById('categories').scrollIntoView()">Découvrir la boutique</button></div></section>
 <section class="section" id="categories"><div class="section-title">Nos Catégories</div><div class="categories">
 <div class="category"><div class="pic">🍓🫙</div><strong>♧ Confitures</strong></div><div class="category"><div class="pic">🍪 🧁</div><strong>♜ Sucré</strong></div><div class="category"><div class="pic">🥧 🥪</div><strong>♨ Salé</strong></div><div class="category"><div class="pic">🥐 🥨</div><strong>♧ Viennoiserie</strong></div></div></section>
+<section class="section" id="promotions-page" hidden><div class="section-title">Nos Promotions</div><div id="shopPromotionsList" class="products"></div><div style="text-align:center;margin:18px"><button type="button" class="back" onclick="showShopHome()">← Retour à la boutique</button></div></section>
 <section class="section" id="category-page" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div class="section-title" id="categoryPageTitle" style="margin:12px 0">Catégorie</div><button type="button" class="back" onclick="showShopHome()">← Retour aux catégories</button></div><div class="products" id="categoryPageProducts"></div></section>
 <section class="section" id="products-section"><div class="section-title" id="shopProductsTitle">Nos Produits Phares</div><div class="products">
 <div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
@@ -212,8 +213,31 @@ function showCategoryProducts(categoryId){
  if(hero)hero.hidden=true;if(cats)cats.hidden=true;if(products)products.hidden=true;if(benefits)benefits.hidden=true;if(footer)footer.hidden=true;if(page)page.hidden=false;
  renderShopProducts();window.scrollTo({top:0,behavior:'smooth'});
 }
+async function showShopPromotions(){
+ categoryPageActive=false;
+ const ids=['shop-hero','categories','products-section','category-page','shop-benefits','shop-footer'];
+ ids.forEach(id=>{const el=document.getElementById(id);if(el)el.hidden=true;});
+ const page=document.getElementById('promotions-page');if(page)page.hidden=false;
+ const list=document.getElementById('shopPromotionsList');
+ if(list)list.innerHTML='<p class="muted" style="grid-column:1/-1;text-align:center">Chargement des promotions...</p>';
+ window.scrollTo({top:0,behavior:'smooth'});
+ try{
+  const {data,error}=await SUPA.from('promotions').select('*').eq('active',true).order('created_at',{ascending:false});
+  if(error)throw error;
+  const now=Date.now();
+  const active=(data||[]).filter(x=>new Date(x.starts_at).getTime()<=now&&new Date(x.ends_at).getTime()>=now);
+  if(!active.length){list.innerHTML='<p class="muted" style="grid-column:1/-1;text-align:center;padding:25px">Aucune promotion active pour le moment. Revenez bientôt !</p>';return;}
+  const [prods,cats]=await Promise.all([loadProducts(false),loadCategories()]);
+  list.innerHTML=active.map(x=>{
+   const target=x.applies_to==='all'?'Toute la boutique':x.applies_to==='product'?'Produit : '+((prods.find(y=>Number(y.id)===Number(x.product_id))||{}).name||'Produit'):'Catégorie : '+((cats.find(y=>Number(y.id)===Number(x.category_id))||{}).name||'Catégorie');
+   const discount=x.discount_type==='percentage'?Number(x.discount_value)+' % de réduction':money(x.discount_value)+' de réduction';
+   return '<article class="product"><div class="pic">🎁</div><h3>'+esc(x.name)+'</h3><div class="price">'+esc(discount)+'</div><p>'+esc(x.description||target)+'</p><small class="muted">'+esc(target)+'</small></article>';
+  }).join('');
+ }catch(e){list.innerHTML='<p class="muted" style="grid-column:1/-1;text-align:center">Impossible de charger les promotions : '+esc(e.message||e)+'</p>';}
+}
 function showShopHome(){
  categoryPageActive=false;selectedShopCategoryId=null;
+ const promoPage=document.getElementById('promotions-page');if(promoPage)promoPage.hidden=true;
  const hero=document.getElementById('shop-hero'),cats=document.getElementById('categories'),products=document.getElementById('products-section'),page=document.getElementById('category-page'),benefits=document.getElementById('shop-benefits'),footer=document.getElementById('shop-footer');
  if(hero)hero.hidden=false;if(cats)cats.hidden=false;if(products)products.hidden=false;if(benefits)benefits.hidden=false;if(footer)footer.hidden=false;if(page)page.hidden=true;
  renderShopProducts();window.scrollTo({top:0,behavior:'smooth'});
