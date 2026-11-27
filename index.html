@@ -18,7 +18,7 @@
 <div id="shop">
 <div class="topline">✓ Produits 100% naturels　 |　 📍 Retrait sur place　 |　 🔒 Paiement au retrait</div>
 <header class="head"><div class="brand"><div class="brandmark">🏡</div><div>Maison Délice<small style="display:block;font:12px Arial;color:#6c4a3c;text-align:center">Confitures Artisanales</small></div></div>
-<div class="search"><input placeholder="Rechercher un produit..."><button onclick="alert('Recherche de démonstration')">⌕</button></div>
+<div class="search"><input id="shopSearchInput" type="search" placeholder="Rechercher un produit..." aria-label="Rechercher un produit" oninput="applyShopSearch()" onkeydown="if(event.key==='Enter')applyShopSearch()"><button type="button" aria-label="Lancer la recherche" onclick="applyShopSearch()">⌕</button></div>
 <div class="quick"><button onclick="alert('Vos favoris seront disponibles avec votre compte')">♡<br>Favoris</button><button onclick="openCart()">🛒<br>Panier <span id="cartCount">0</span></button></div></header>
 <nav class="nav"><button class="active" onclick="showShopHome()">⌂ Accueil</button><button onclick="document.getElementById('categories').scrollIntoView()">▦ Nos Produits</button><button>Promotions</button><button>Nouveautés</button><button>À propos</button><button>Contact</button></nav>
 <section class="hero" id="shop-hero"><div class="hero-copy"><div class="eyebrow">L'ART DU FAIT MAISON</div><h1>Des confitures artisanales au goût authentique</h1><p>Des créations gourmandes préparées avec passion, pour apporter une touche d'authenticité à vos moments précieux.</p><button class="primary" onclick="document.getElementById('categories').scrollIntoView()">Découvrir la boutique</button></div></section>
@@ -180,15 +180,21 @@ async function loadProducts(admin=false){
 }
 let selectedShopCategoryId = null;
 let categoryPageActive=false;
+let shopSearchQuery='';
+function applyShopSearch(){
+ shopSearchQuery=(document.getElementById('shopSearchInput')?.value||'').trim().toLocaleLowerCase('fr');
+ renderShopProducts();
+}
 function renderShopProducts(){
  const productBox=categoryPageActive?document.getElementById('categoryPageProducts'):document.querySelector('#products-section .products');
  const title=document.getElementById('shopProductsTitle');
  if(!productBox)return;
- const visible=selectedShopCategoryId===null?productsCache:productsCache.filter(p=>Number(p.category_id)===Number(selectedShopCategoryId));
+ const inCategory=selectedShopCategoryId===null?productsCache:productsCache.filter(p=>Number(p.category_id)===Number(selectedShopCategoryId));
+ const visible=shopSearchQuery?inCategory.filter(p=>[p.name,p.description,p.reference,...(p.variants||[]).flatMap(v=>[v.name,v.weight])].filter(Boolean).join(' ').toLocaleLowerCase('fr').includes(shopSearchQuery)):inCategory;
  const selectedCategory=categoriesCache.find(c=>Number(c.id)===Number(selectedShopCategoryId));
- if(categoryPageActive){const pageTitle=document.getElementById('categoryPageTitle');if(pageTitle)pageTitle.textContent=selectedCategory?selectedCategory.name:'Catégorie';}
- else if(title)title.textContent='Nos Produits Phares';
- productBox.innerHTML=visible.length?visible.map(p=>{const vs=p.variants||[];const fallback={id:'base',name:p.capacity||'Format standard',weight:p.capacity||'',price:p.price,stock:p.stock};const opts=vs.length?vs:[fallback];const chosen=opts.find(v=>Number(v.stock)>0)||opts[0];return `<div class="product" data-product="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><label class="muted" for="variant-${p.id}">Choisir le format</label><select id="variant-${p.id}" class="variant-select" onchange="updateVariantCard(${p.id},this.value)">${opts.map(v=>`<option value="${v.id}" data-price="${v.price}" data-stock="${v.stock}" ${String(v.id)===String(chosen.id)?'selected':''}>${esc(v.weight||(v.name==='Format standard'&&p.reference?p.reference:v.name)||p.reference||'Format standard')} — ${money(v.price)}</option>`).join('')}</select><div class="price variant-price" id="variant-price-${p.id}">${money(chosen.price)}</div><small class="muted variant-stock" id="variant-stock-${p.id}">${Number(chosen.stock)>0?'Disponible ('+Number(chosen.stock)+' en stock)':'Rupture de stock'}</small><button class="add-cart" id="add-cart-${p.id}" onclick="addSelectedToCart(${p.id})" ${Number(chosen.stock)<=0?'disabled':''}>Ajouter au panier</button></div>`}).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">'+(selectedCategory?'Aucun produit disponible dans cette catégorie pour le moment.':'Les produits seront bientôt disponibles.')+'</p>';
+ if(categoryPageActive){const pageTitle=document.getElementById('categoryPageTitle');if(pageTitle)pageTitle.textContent=(selectedCategory?selectedCategory.name:'Catégorie')+(shopSearchQuery?' — '+visible.length+' résultat(s)':'');}
+ else if(title)title.textContent=shopSearchQuery?'Résultats de recherche ('+visible.length+')':'Nos Produits Phares';
+ productBox.innerHTML=visible.length?visible.map(p=>{const vs=p.variants||[];const fallback={id:'base',name:p.capacity||'Format standard',weight:p.capacity||'',price:p.price,stock:p.stock};const opts=vs.length?vs:[fallback];const chosen=opts.find(v=>Number(v.stock)>0)||opts[0];return `<div class="product" data-product="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><label class="muted" for="variant-${p.id}">Choisir le format</label><select id="variant-${p.id}" class="variant-select" onchange="updateVariantCard(${p.id},this.value)">${opts.map(v=>`<option value="${v.id}" data-price="${v.price}" data-stock="${v.stock}" ${String(v.id)===String(chosen.id)?'selected':''}>${esc(v.weight||(v.name==='Format standard'&&p.reference?p.reference:v.name)||p.reference||'Format standard')} — ${money(v.price)}</option>`).join('')}</select><div class="price variant-price" id="variant-price-${p.id}">${money(chosen.price)}</div><small class="muted variant-stock" id="variant-stock-${p.id}">${Number(chosen.stock)>0?'Disponible ('+Number(chosen.stock)+' en stock)':'Rupture de stock'}</small><button class="add-cart" id="add-cart-${p.id}" onclick="addSelectedToCart(${p.id})" ${Number(chosen.stock)<=0?'disabled':''}>Ajouter au panier</button></div>`}).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">'+(shopSearchQuery?'Aucun produit ne correspond à votre recherche.':selectedCategory?'Aucun produit disponible dans cette catégorie pour le moment.':'Les produits seront bientôt disponibles.')+'</p>';
 }
 async function renderShop(){
  try{
