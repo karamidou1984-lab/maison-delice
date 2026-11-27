@@ -29,7 +29,7 @@
 <div class="product"><div class="pic">🍓🫙</div><h3>Confiture de Fraises</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍑🫙</div><h3>Confiture d'Abricots</h3><div class="price">450 DA</div></div><div class="product"><div class="pic">🍇🫙</div><h3>Confiture de Figues</h3><div class="price">500 DA</div></div><div class="product"><div class="pic">🍊🫙</div><h3>Confiture d'Oranges</h3><div class="price">450 DA</div></div></div></section>
 <section class="section" id="shop-benefits"><div class="benefits"><div class="benefit">📍<b>Retrait sur place</b>Commande préparée avec soin</div><div class="benefit">💳<b>Paiement au retrait</b>Simple et sécurisé</div><div class="benefit">🌿<b>Produits naturels</b>Sans additifs artificiels</div><div class="benefit">🎧<b>Service client</b>À votre écoute</div></div></section>
 <footer class="footer" id="shop-footer">Maison Délice — Le goût authentique du fait maison<br><small>Facebook · Instagram · TikTok</small></footer>
-<button class="admin-entry" onclick="openAdmin()">Administration ↗</button>
+
 </div>
 
 <div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Retrait sur place · Paiement au retrait. Le stock sera vérifié lors de la commande.</p></div></div>
@@ -72,6 +72,9 @@ const money=n=>new Intl.NumberFormat('fr-DZ').format(Number(n||0))+' DA';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function closeLogin(){document.getElementById('authModal').style.display='none'}
 function openAdmin(){document.getElementById('authModal').style.display='flex';document.getElementById('loginMessage').textContent='';}
+// Accès privé à l’administration via l’URL directe /#administration
+if(window.location.hash==='#administration')openAdmin();
+window.addEventListener('hashchange',()=>{if(window.location.hash==='#administration')openAdmin();});
 function closeAdmin(){if(orderMonitorTimer){clearInterval(orderMonitorTimer);orderMonitorTimer=null;}document.getElementById('admin').style.display='none';document.getElementById('shop').style.display='block';}
 async function verifyAdmin(user){
  const {data,error}=await SUPA.from('profiles').select('id,full_name,role').eq('id',user.id).maybeSingle();
