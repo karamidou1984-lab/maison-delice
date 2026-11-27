@@ -98,12 +98,38 @@ async function startOrderMonitoring(){
   bar=document.createElement('div');bar.id='orderAlertBar';bar.className='order-alert-bar';
   bar.innerHTML='<strong>Surveillance des nouvelles commandes</strong><span id="orderMonitorStatus">Initialisation de la surveillance…</span><button type="button" id="enableOrderNotifications">Activer les notifications</button>';
   adminMain.prepend(bar);
-  document.getElementById('enableOrderNotifications').addEventListener('click',async()=>{
-   if(!('Notification' in window)){document.getElementById('orderMonitorStatus').textContent='Notifications système non prises en charge sur ce navigateur.';return;}
-   try{const permission=await Notification.requestPermission();document.getElementById('enableOrderNotifications').textContent=permission==='granted'?'Notifications activées':'Autorisation non accordée';}
-   catch(e){document.getElementById('orderMonitorStatus').textContent='Impossible d’activer les notifications système.';}
-  });
  }
+ const notifyButton=document.getElementById('enableOrderNotifications');
+ const monitorStatus=document.getElementById('orderMonitorStatus');
+ const prepareNotificationWorker=async()=>{
+  if(!('serviceWorker' in navigator))throw new Error('Ce navigateur ne prend pas en charge les notifications en arrière-plan.');
+  const registration=await navigator.serviceWorker.register('/service-worker.js');
+  await navigator.serviceWorker.ready;
+  window.__mdOrderNotificationRegistration=registration;
+  return registration;
+ };
+ if('Notification' in window&&Notification.permission==='granted'){
+  try{await prepareNotificationWorker();notifyButton.textContent='Notifications activées';}
+  catch(e){notifyButton.textContent='Réactiver les notifications';if(monitorStatus)monitorStatus.textContent=e.message;}
+ }else if('Notification' in window&&Notification.permission==='denied'){
+  notifyButton.textContent='Notifications bloquées dans le navigateur';
+ }
+ notifyButton.onclick=async()=>{
+  if(!('Notification' in window)){if(monitorStatus)monitorStatus.textContent='Notifications système non prises en charge sur ce navigateur.';return;}
+  try{
+   await prepareNotificationWorker();
+   const permission=await Notification.requestPermission();
+   if(permission==='granted'){
+    notifyButton.textContent='Notifications activées';
+    if(monitorStatus)monitorStatus.textContent='Notifications activées sur cet appareil. Gardez la session administrateur ouverte pour surveiller les commandes.';
+    const registration=window.__mdOrderNotificationRegistration;
+    await registration.showNotification('Maison Délice',{body:'Les notifications de nouvelles commandes sont activées.',tag:'md-notification-test'});
+   }else{
+    notifyButton.textContent='Autorisation non accordée';
+    if(monitorStatus)monitorStatus.textContent='Autorisez les notifications de Maison Délice dans les paramètres du navigateur.';
+   }
+  }catch(e){if(monitorStatus)monitorStatus.textContent='Erreur d’activation : '+(e.message||'réessayez');}
+ };
  const pollOrders=async()=>{
   if(!currentUser||document.getElementById('admin').style.display==='none')return;
   const status=document.getElementById('orderMonitorStatus');
@@ -113,13 +139,17 @@ async function startOrderMonitoring(){
    if(status)status.textContent='Surveillance active · Dernière vérification : '+new Date().toLocaleTimeString('fr-DZ');
    if(!newOrders?.length)return;
    lastSeenOrderId=Math.max(lastSeenOrderId,...newOrders.map(o=>Number(o.id)||0));
-   const latest=newOrders[newOrders.length-1];
-   const toast=document.createElement('div');toast.className='new-order-toast';
-   toast.innerHTML='<strong>Nouvelle commande reçue !</strong><span>Commande #'+esc(latest.id)+' · '+money(latest.total)+'</span><br><button type="button">Voir les commandes</button>';
-   toast.querySelector('button').addEventListener('click',()=>{toast.remove();const btn=[...document.querySelectorAll('.sidebtn')].find(x=>x.textContent.includes('Commandes'));showPage('orders',btn);});
-   document.body.appendChild(toast);setTimeout(()=>toast.remove(),20000);
-   if('Notification' in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){
-    try{new Notification('Nouvelle commande Maison Délice',{body:'Commande #'+latest.id+' · '+money(latest.total)});}catch(e){}
+   for(const order of newOrders){
+    const toast=document.createElement('div');toast.className='new-order-toast';
+    toast.innerHTML='<strong>Nouvelle commande reçue !</strong><span>Commande #'+esc(order.id)+' · '+money(order.total)+'</span><br><button type="button">Voir les commandes</button>';
+    toast.querySelector('button').addEventListener('click',()=>{toast.remove();const btn=[...document.querySelectorAll('.sidebtn')].find(x=>x.textContent.includes('Commandes'));showPage('orders',btn);});
+    document.body.appendChild(toast);setTimeout(()=>toast.remove(),20000);
+    if('Notification' in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){
+     try{
+      const registration=window.__mdOrderNotificationRegistration||await navigator.serviceWorker.ready;
+      await registration.showNotification('Nouvelle commande Maison Délice',{body:'Commande #'+order.id+' · '+money(order.total),tag:'md-order-'+order.id,data:{url:'/'}});
+     }catch(notificationError){if(status)status.textContent='Commande détectée, mais notification système impossible : '+notificationError.message;}
+    }
    }
   }catch(e){if(status)status.textContent='Erreur de surveillance : '+(e.message||'vérifiez la connexion');}
  };
