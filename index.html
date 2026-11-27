@@ -90,18 +90,37 @@ async function startOrderMonitoring(){
  lastSeenOrderId=Number(data?.[0]?.id||0);
  const adminMain=document.querySelector('.admin-main');
  let bar=document.getElementById('orderAlertBar');
- if(!bar){bar=document.createElement('div');bar.id='orderAlertBar';bar.className='order-alert-bar';bar.innerHTML='<strong>Surveillance des nouvelles commandes</strong><span>Vérification automatique toutes les 30 secondes.</span><button type="button" id="enableOrderNotifications">Activer les notifications</button>';adminMain.prepend(bar);document.getElementById('enableOrderNotifications').addEventListener('click',async()=>{if(!('Notification'in window)){alert('Les notifications du navigateur ne sont pas prises en charge.');return;}const permission=await Notification.requestPermission();document.getElementById('enableOrderNotifications').textContent=permission==='granted'?'Notifications activées': 'Autorisation non accordée';});}
- orderMonitorTimer=setInterval(async()=>{
+ if(!bar){
+  bar=document.createElement('div');bar.id='orderAlertBar';bar.className='order-alert-bar';
+  bar.innerHTML='<strong>Surveillance des nouvelles commandes</strong><span id="orderMonitorStatus">Initialisation de la surveillance…</span><button type="button" id="enableOrderNotifications">Activer les notifications</button>';
+  adminMain.prepend(bar);
+  document.getElementById('enableOrderNotifications').addEventListener('click',async()=>{
+   if(!('Notification' in window)){document.getElementById('orderMonitorStatus').textContent='Notifications système non prises en charge sur ce navigateur.';return;}
+   try{const permission=await Notification.requestPermission();document.getElementById('enableOrderNotifications').textContent=permission==='granted'?'Notifications activées':'Autorisation non accordée';}
+   catch(e){document.getElementById('orderMonitorStatus').textContent='Impossible d’activer les notifications système.';}
+  });
+ }
+ const pollOrders=async()=>{
   if(!currentUser||document.getElementById('admin').style.display==='none')return;
-  const {data:newOrders,error:pollError}=await SUPA.from('orders').select('id,total,created_at,customers(name)').gt('id',lastSeenOrderId).order('id',{ascending:true});
-  if(pollError||!newOrders?.length)return;
-  lastSeenOrderId=Math.max(lastSeenOrderId,...newOrders.map(o=>Number(o.id)||0));
-  const latest=newOrders[newOrders.length-1];
-  const toast=document.createElement('div');toast.className='new-order-toast';toast.innerHTML='<strong>Nouvelle commande reçue !</strong><span>Commande #'+esc(latest.id)+' · '+esc(latest.customers?.name||'Client')+' · '+money(latest.total)+'</span><br><button type="button">Voir les commandes</button>';
-  toast.querySelector('button').addEventListener('click',()=>{toast.remove();const btn=[...document.querySelectorAll('.sidebtn')].find(x=>x.textContent.includes('Commandes'));showPage('orders',btn);});
-  document.body.appendChild(toast);setTimeout(()=>toast.remove(),15000);
-  if('Notification'in window&&Notification.permission==='granted'){try{new Notification('Nouvelle commande Maison Délice',{body:'Commande #'+latest.id+' · '+(latest.customers?.name||'Client')+' · '+money(latest.total)});}catch(e){}}
- },30000);
+  const status=document.getElementById('orderMonitorStatus');
+  try{
+   const {data:newOrders,error:pollError}=await SUPA.from('orders').select('id,total,created_at').gt('id',lastSeenOrderId).order('id',{ascending:true});
+   if(pollError)throw pollError;
+   if(status)status.textContent='Surveillance active · Dernière vérification : '+new Date().toLocaleTimeString('fr-DZ');
+   if(!newOrders?.length)return;
+   lastSeenOrderId=Math.max(lastSeenOrderId,...newOrders.map(o=>Number(o.id)||0));
+   const latest=newOrders[newOrders.length-1];
+   const toast=document.createElement('div');toast.className='new-order-toast';
+   toast.innerHTML='<strong>Nouvelle commande reçue !</strong><span>Commande #'+esc(latest.id)+' · '+money(latest.total)+'</span><br><button type="button">Voir les commandes</button>';
+   toast.querySelector('button').addEventListener('click',()=>{toast.remove();const btn=[...document.querySelectorAll('.sidebtn')].find(x=>x.textContent.includes('Commandes'));showPage('orders',btn);});
+   document.body.appendChild(toast);setTimeout(()=>toast.remove(),20000);
+   if('Notification' in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){
+    try{new Notification('Nouvelle commande Maison Délice',{body:'Commande #'+latest.id+' · '+money(latest.total)});}catch(e){}
+   }
+  }catch(e){if(status)status.textContent='Erreur de surveillance : '+(e.message||'vérifiez la connexion');}
+ };
+ await pollOrders();
+ orderMonitorTimer=setInterval(pollOrders,15000);
 }
 async function loadCategories(){
  const {data,error}=await SUPA.from('categories').select('id,name,slug,is_active').eq('is_active',true).order('id');
