@@ -182,6 +182,19 @@ async function loadProducts(admin=false){
 let selectedShopCategoryId = null;
 let categoryPageActive=false;
 let shopSearchQuery='';
+let activePromotionsCache=[];
+function getPromoPrice(product,price){
+ const now=Date.now();
+ const matches=activePromotionsCache.filter(x=>x.active&&new Date(x.starts_at).getTime()<=now&&new Date(x.ends_at).getTime()>=now&&(x.applies_to==='all'||(x.applies_to==='product'&&Number(x.product_id)===Number(product.id))||(x.applies_to==='category'&&Number(x.category_id)===Number(product.category_id))));
+ if(!matches.length)return {price:Number(price),discounted:false};
+ const best=matches.map(x=>({promo:x,amount:x.discount_type==='percentage'?Number(price)*Number(x.discount_value)/100:Number(x.discount_value)})).sort((a,b)=>b.amount-a.amount)[0];
+ return {price:Math.max(0,Math.round((Number(price)-best.amount)*100)/100),discounted:true,original:Number(price),promo:best.promo};
+}
+function promoPriceMarkup(product,price){
+ const p=getPromoPrice(product,price);
+ return p.discounted?'<del style="color:#8b8177;font-size:.88em">'+money(price)+'</del> <strong style="color:#8a1236">'+money(p.price)+'</strong>':money(price);
+}
+
 function applyShopSearch(){
  shopSearchQuery=(document.getElementById('shopSearchInput')?.value||'').trim().toLocaleLowerCase('fr');
  renderShopProducts();
@@ -195,11 +208,11 @@ function renderShopProducts(){
  const selectedCategory=categoriesCache.find(c=>Number(c.id)===Number(selectedShopCategoryId));
  if(categoryPageActive){const pageTitle=document.getElementById('categoryPageTitle');if(pageTitle)pageTitle.textContent=(selectedCategory?selectedCategory.name:'Catégorie')+(shopSearchQuery?' — '+visible.length+' résultat(s)':'');}
  else if(title)title.textContent=shopSearchQuery?'Résultats de recherche ('+visible.length+')':'Nos Produits Phares';
- productBox.innerHTML=visible.length?visible.map(p=>{const vs=p.variants||[];const fallback={id:'base',name:p.capacity||'Format standard',weight:p.capacity||'',price:p.price,stock:p.stock};const opts=vs.length?vs:[fallback];const chosen=opts.find(v=>Number(v.stock)>0)||opts[0];return `<div class="product" data-product="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><label class="muted" for="variant-${p.id}">Choisir le format</label><select id="variant-${p.id}" class="variant-select" onchange="updateVariantCard(${p.id},this.value)">${opts.map(v=>`<option value="${v.id}" data-price="${v.price}" data-stock="${v.stock}" ${String(v.id)===String(chosen.id)?'selected':''}>${esc(v.weight||(v.name==='Format standard'&&p.reference?p.reference:v.name)||p.reference||'Format standard')} — ${money(v.price)}</option>`).join('')}</select><div class="price variant-price" id="variant-price-${p.id}">${money(chosen.price)}</div><small class="muted variant-stock" id="variant-stock-${p.id}">${Number(chosen.stock)>0?'Disponible ('+Number(chosen.stock)+' en stock)':'Rupture de stock'}</small><button class="add-cart" id="add-cart-${p.id}" onclick="addSelectedToCart(${p.id})" ${Number(chosen.stock)<=0?'disabled':''}>Ajouter au panier</button></div>`}).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">'+(shopSearchQuery?'Aucun produit ne correspond à votre recherche.':selectedCategory?'Aucun produit disponible dans cette catégorie pour le moment.':'Les produits seront bientôt disponibles.')+'</p>';
+ productBox.innerHTML=visible.length?visible.map(p=>{const vs=p.variants||[];const fallback={id:'base',name:p.capacity||'Format standard',weight:p.capacity||'',price:p.price,stock:p.stock};const opts=vs.length?vs:[fallback];const chosen=opts.find(v=>Number(v.stock)>0)||opts[0];return `<div class="product" data-product="${p.id}"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:100%;height:120px;object-fit:cover;border-radius:10px">`:'🍯'}</div><h3>${esc(p.name)}</h3><label class="muted" for="variant-${p.id}">Choisir le format</label><select id="variant-${p.id}" class="variant-select" onchange="updateVariantCard(${p.id},this.value)">${opts.map(v=>`<option value="${v.id}" data-price="${getPromoPrice(p,v.price).price}" data-original-price="${v.price}" data-stock="${v.stock}" ${String(v.id)===String(chosen.id)?'selected':''}>${esc(v.weight||(v.name==='Format standard'&&p.reference?p.reference:v.name)||p.reference||'Format standard')} — ${money(getPromoPrice(p,v.price).price)}</option>`).join('')}</select><div class="price variant-price" id="variant-price-${p.id}">${promoPriceMarkup(p,chosen.price)}</div><small class="muted variant-stock" id="variant-stock-${p.id}">${Number(chosen.stock)>0?'Disponible ('+Number(chosen.stock)+' en stock)':'Rupture de stock'}</small><button class="add-cart" id="add-cart-${p.id}" onclick="addSelectedToCart(${p.id})" ${Number(chosen.stock)<=0?'disabled':''}>Ajouter au panier</button></div>`}).join(''):'<p class="muted" style="grid-column:1/-1;text-align:center">'+(shopSearchQuery?'Aucun produit ne correspond à votre recherche.':selectedCategory?'Aucun produit disponible dans cette catégorie pour le moment.':'Les produits seront bientôt disponibles.')+'</p>';
 }
 async function renderShop(){
  try{
-  const [cats,prods]=await Promise.all([loadCategories(),loadProducts(false)]);
+  const [cats,prods,promos]=await Promise.all([loadCategories(),loadProducts(false),SUPA.from('promotions').select('*').eq('active',true)]);if(promos.error)throw promos.error;activePromotionsCache=promos.data||[];
   const catBox=document.querySelector('#categories .categories');
   if(catBox)catBox.innerHTML=cats.map((c,i)=>`<button type="button" class="category" onclick="showCategoryProducts(${Number(c.id)})" aria-label="Voir les produits : ${esc(c.name)}"><span class="pic">${['🍓🫙','🍪🧁','🥧🥪','🥐🥨'][i%4]}</span><strong>${esc(c.name)}</strong></button>`).join('');
   renderShopProducts();
@@ -243,7 +256,7 @@ function showShopHome(){
  renderShopProducts();window.scrollTo({top:0,behavior:'smooth'});
 }
 function showAllShopProducts(){showShopHome();}
-function updateVariantCard(productId,variantId){const sel=document.getElementById('variant-'+productId);const opt=sel&&sel.selectedOptions&&sel.selectedOptions[0];if(!opt)return;const price=document.getElementById('variant-price-'+productId),stock=document.getElementById('variant-stock-'+productId),btn=document.getElementById('add-cart-'+productId);if(price)price.textContent=money(opt.dataset.price);if(stock){const n=Number(opt.dataset.stock);stock.textContent=n>0?'Disponible ('+n+' en stock)':'Rupture de stock';}if(btn)btn.disabled=Number(opt.dataset.stock)<=0;}
+function updateVariantCard(productId,variantId){const sel=document.getElementById('variant-'+productId);const opt=sel&&sel.selectedOptions&&sel.selectedOptions[0];if(!opt)return;const price=document.getElementById('variant-price-'+productId),stock=document.getElementById('variant-stock-'+productId),btn=document.getElementById('add-cart-'+productId);if(price){const p=productsCache.find(x=>Number(x.id)===Number(productId));price.innerHTML=p?promoPriceMarkup(p,opt.dataset.originalPrice||opt.dataset.price):money(opt.dataset.price);}if(stock){const n=Number(opt.dataset.stock);stock.textContent=n>0?'Disponible ('+n+' en stock)':'Rupture de stock';}if(btn)btn.disabled=Number(opt.dataset.stock)<=0;}
 
 let mdCart=[];
 try{mdCart=JSON.parse(localStorage.getItem('md_cart_variants')||'[]');if(!Array.isArray(mdCart))mdCart=[];}catch(e){mdCart=[];}
