@@ -192,7 +192,7 @@ async function loadCategories(){
 async function loadProducts(admin=false){
  let q=SUPA.from('products').select('id,name,reference,description,price,stock,capacity,category_id,active,is_active').order('id',{ascending:false});
  if(!admin) q=q.eq('is_active',true);
- const {data,error}=await q; if(error) throw error; productsCache=data||[];
+ const {data,error}=await q; if(error) throw error; productsCache=(data||[]).filter(p=>/[A-Za-zÀ-ÿ0-9]/.test(String(p.name||'')));
  const ids=productsCache.map(p=>p.id);
  if(ids.length){
   const [{data:imgs,error:ie},{data:variants,error:ve}]=await Promise.all([
