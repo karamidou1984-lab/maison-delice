@@ -13,6 +13,31 @@
 .orders-mobile{display:none}.order-mobile-card{border:1px solid #e7e1d8;border-radius:14px;background:#fff;padding:14px;margin:10px 0;min-width:0}.order-mobile-head{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#720d2b;padding-bottom:10px;margin-bottom:7px;border-bottom:1px solid #eee}.order-mobile-head strong{font-size:16px}.order-mobile-head b{white-space:nowrap}.order-mobile-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0}.order-mobile-row span{color:#777;font-size:13px;flex:0 0 82px}.order-mobile-row strong{font-size:14px;text-align:right;overflow-wrap:anywhere}.order-mobile-status{align-items:center}.order-mobile-card .status-select{max-width:190px!important;width:auto;min-height:42px}.order-mobile-card .blackbtn{width:100%;margin-top:10px;min-height:44px}
 @media(max-width:700px){.orders-desktop{display:none}.orders-mobile{display:block}.admin-order-filters{width:100%;box-sizing:border-box}.order-mobile-card{box-sizing:border-box}}
 </style>
+<style>
+@media(max-width:750px){
+  #products-section .products,
+  #categoryPageProducts,
+  #shopPromotionsList{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:14px!important;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+  #products-section .products>.product,
+  #categoryPageProducts>.product,
+  #shopPromotionsList>.product{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin:0;
+  }
+  .product .pic{width:100%;max-width:100%;overflow:hidden}
+  .product .pic img{display:block;width:100%;max-width:100%;height:180px!important;object-fit:cover}
+  .product select{width:100%;max-width:100%;min-width:0}
+}
+</style>
 </head>
 <body>
 <div id="shop">
@@ -203,7 +228,8 @@ function renderShopProducts(){
  const productBox=categoryPageActive?document.getElementById('categoryPageProducts'):document.querySelector('#products-section .products');
  const title=document.getElementById('shopProductsTitle');
  if(!productBox)return;
- const inCategory=selectedShopCategoryId===null?productsCache:productsCache.filter(p=>Number(p.category_id)===Number(selectedShopCategoryId));
+ const validProducts=productsCache.filter(p=>/[\\p{L}\\p{N}]/u.test(String(p.name||'')));
+ const inCategory=selectedShopCategoryId===null?validProducts:validProducts.filter(p=>Number(p.category_id)===Number(selectedShopCategoryId));
  const visible=shopSearchQuery?inCategory.filter(p=>[p.name,p.description,p.reference,...(p.variants||[]).flatMap(v=>[v.name,v.weight])].filter(Boolean).join(' ').toLocaleLowerCase('fr').includes(shopSearchQuery)):inCategory;
  const selectedCategory=categoriesCache.find(c=>Number(c.id)===Number(selectedShopCategoryId));
  if(categoryPageActive){const pageTitle=document.getElementById('categoryPageTitle');if(pageTitle)pageTitle.textContent=(selectedCategory?selectedCategory.name:'Catégorie')+(shopSearchQuery?' — '+visible.length+' résultat(s)':'');}
