@@ -214,7 +214,7 @@ async function renderShop(){
  try{
   const [cats,prods,promos]=await Promise.all([loadCategories(),loadProducts(false),SUPA.from('promotions').select('*').eq('active',true)]);if(promos.error)throw promos.error;activePromotionsCache=promos.data||[];
   const catBox=document.querySelector('#categories .categories');
-  if(catBox)catBox.innerHTML=cats.map((c)=>{const n=String(c.name||'').toLowerCase();const art=n.includes('confit')?'confitures.svg':n.includes('sucr')?'sucre.svg':n.includes('sal')?'sale.svg':n.includes('vien')?'viennoiserie.svg':'confitures.svg';return `<button type="button" class="category" onclick="showCategoryProducts(${Number(c.id)})" aria-label="Voir les produits : ${esc(c.name)}"><span class="pic"><img src="/assets/categories/${art}" alt="${esc(c.name)}" loading="lazy"></span><strong>${esc(c.name)}</strong></button>`;}).join('');
+  if(catBox)catBox.innerHTML=cats.map((c)=>{const n=String(c.name||'').toLowerCase();const art=n.includes('confit')?'confitures.svg':n.includes('sucr')?'sucre.svg':n.includes('sal')?'sale-category.svg':n.includes('vien')?'viennoiserie.svg':'confitures.svg';return `<button type="button" class="category" onclick="showCategoryProducts(${Number(c.id)})" aria-label="Voir les produits : ${esc(c.name)}"><span class="pic"><img src="/assets/categories/${art}" alt="${esc(c.name)}" loading="lazy"></span><strong>${esc(c.name)}</strong></button>`;}).join('');
   renderShopProducts();
  }catch(e){console.error(e);}
 }
