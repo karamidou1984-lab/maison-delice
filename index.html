@@ -228,7 +228,7 @@ function renderShopProducts(){
  const productBox=categoryPageActive?document.getElementById('categoryPageProducts'):document.querySelector('#products-section .products');
  const title=document.getElementById('shopProductsTitle');
  if(!productBox)return;
- const validProducts=productsCache.filter(p=>/[\\p{L}\\p{N}]/u.test(String(p.name||'')));
+ const validProducts=productsCache.filter(p=>/[A-Za-zÀ-ÿ0-9]/.test(String(p.name||'')));
  const inCategory=selectedShopCategoryId===null?validProducts:validProducts.filter(p=>Number(p.category_id)===Number(selectedShopCategoryId));
  const visible=shopSearchQuery?inCategory.filter(p=>[p.name,p.description,p.reference,...(p.variants||[]).flatMap(v=>[v.name,v.weight])].filter(Boolean).join(' ').toLocaleLowerCase('fr').includes(shopSearchQuery)):inCategory;
  const selectedCategory=categoriesCache.find(c=>Number(c.id)===Number(selectedShopCategoryId));
