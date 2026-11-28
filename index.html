@@ -169,6 +169,21 @@
 #admin .dashboard-order-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 @media(max-width:750px){#admin .admin-layout{display:flex!important;flex-direction:column}#admin .sidebar{display:grid!important;width:100%!important;box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}#admin .sidebtn{font-size:10px!important;white-space:normal;line-height:1.3;min-width:0;padding:7px 2px!important}#admin .admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}#admin .admin-welcome{padding:18px}#admin .dashboard-order-cards{grid-template-columns:minmax(0,1fr)}}
 </style>
+<style id="admin-button-colors">
+#admin .sidebar .sidebtn:nth-of-type(1){background:#173b63!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(2){background:#176b4d!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(3){background:#a34b16!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(4){background:#69429a!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(5){background:#08767b!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(6){background:#9b315f!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(7){background:#475569!important;color:#fff!important;border-color:transparent!important}
+#admin .sidebar .sidebtn:nth-of-type(8){background:#79512f!important;color:#fff!important;border-color:transparent!important}
+#admin .admin-shortcuts button:nth-child(1){background:#a34b16;color:white;border-color:transparent}
+#admin .admin-shortcuts button:nth-child(2){background:#176b4d;color:white;border-color:transparent}
+#admin .admin-shortcuts button:nth-child(3){background:#08767b;color:white;border-color:transparent}
+#admin .admin-shortcuts button:nth-child(4){background:#69429a;color:white;border-color:transparent}
+#admin .sidebar .sidebtn.active{box-shadow:inset 0 0 0 2px white,0 0 0 2px #54483b!important}#admin .sidebar .sidebtn:hover,#admin .admin-shortcuts button:hover{filter:brightness(1.12)}
+</style>
 </head>
 <body>
 <div id="shop">
