@@ -119,6 +119,18 @@ body{background:#fff;color:#40343a}
 
 
 </style>
+<style id="md-dashboard-enhancements">
+.md-dashboard{display:grid;gap:16px}
+.md-dashboard-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,1fr);gap:15px}
+.md-dashboard-grid>.panel{min-width:0}
+.md-bars{height:190px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:10px;padding:12px 4px 4px;border-bottom:1px solid #eee}
+.md-day{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:7px;min-width:0}
+.md-day strong{font-size:11px;color:#6d6259}
+.md-day-bar{width:min(100%,34px);min-height:4px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#c5a15b,#76513a)}
+.md-day small{font-size:11px;color:#777;text-transform:capitalize}
+.md-stock-alert{display:inline-block;min-width:28px;padding:4px 8px;text-align:center;border-radius:12px;background:#fff1dc;color:#9a4b18;font-weight:bold}
+@media(max-width:850px){.md-dashboard-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div id="shop">
@@ -218,9 +230,47 @@ async function showPage(p,b){if(b){document.querySelectorAll('.sidebtn').forEach
 async function render(p){currentPage=p;const titles={dashboard:'Dashboard',products:'Produits',orders:'Commandes',customers:'Clients',stock:'Stocks',settings:'Paramètres'};document.getElementById('pageTitle').textContent=titles[p]||p;const host=document.getElementById('pageContent');host.innerHTML='<div class="panel">Chargement des données...</div>';
  try{
   if(p==='dashboard'){
-   const [{data:orders,error:oe},{data:customers,error:ce},prods]=await Promise.all([SUPA.from('orders').select('id,total,status,created_at'),SUPA.from('customers').select('id'),loadProducts(true)]);
-   if(oe)throw oe;if(ce)throw ce;const revenue=(orders||[]).reduce((s,o)=>s+Number(o.total||0),0);
-   host.innerHTML=`<div class="stats"><div class="stat"><small>Chiffre d'affaires</small><strong>${money(revenue)}</strong><span class="muted">Total des commandes enregistrées</span></div><div class="stat"><small>Commandes</small><strong>${orders.length}</strong><span class="muted">Base de données</span></div><div class="stat"><small>Produits</small><strong>${prods.length}</strong><span class="muted">Catalogue</span></div><div class="stat"><small>Clients</small><strong>${customers.length}</strong><span class="muted">Clients enregistrés</span></div></div><div class="panel content-panel"><h3>Dernières commandes</h3>${orders.length?orderTable(orders.slice(-8).reverse()):'<p class="muted">Aucune commande pour le moment.</p>'}</div>`;
+   const [{data:orders,error:oe},{data:customers,error:ce},prods]=await Promise.all([
+    SUPA.from('orders').select('id,total,status,created_at').order('created_at',{ascending:false}),
+    SUPA.from('customers').select('id'),loadProducts(true)
+   ]);
+   if(oe)throw oe;if(ce)throw ce;
+   const completed=orders.filter(o=>o.status==='delivered');
+   const collectedRevenue=completed.reduce((sum,o)=>sum+Number(o.total||0),0);
+   const pendingCount=orders.filter(o=>o.status==='pending').length;
+   const activeProducts=prods.filter(x=>(x.is_active??x.active)!==false).length;
+   const lowStock=prods.flatMap(p=>(p.variants||[]).filter(v=>v.active!==false&&Number(v.stock||0)<=5).map(v=>({product:p.name,capacity:v.weight||v.name||'Format standard',stock:Number(v.stock||0)}))).sort((a,b)=>a.stock-b.stock);
+   const statusLabels={pending:'En attente',confirmed:'Confirmée',preparing:'En préparation',shipped:'Prête à retirer',delivered:'Retirée',cancelled:'Annulée'};
+   const recent=orders.slice(0,8);
+   const recentHtml=recent.length?'<div style="overflow:auto"><table class="order-table"><tr><th>N°</th><th>Montant</th><th>État</th><th>Date</th></tr>'+recent.map(o=>'<tr><td>#'+esc(o.id)+'</td><td>'+money(o.total)+'</td><td>'+esc(statusLabels[o.status]||o.status||'—')+'</td><td>'+(o.created_at?new Date(o.created_at).toLocaleDateString('fr-DZ'):'—')+'</td></tr>').join('')+'</table></div>':'<p class="muted">Aucune commande pour le moment.</p>';
+   const today=new Date();today.setHours(0,0,0,0);
+   const days=Array.from({length:7},(_,i)=>{const d=new Date(today);d.setDate(today.getDate()-6+i);const key=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');return {key,label:d.toLocaleDateString('fr-DZ',{weekday:'short'}),count:0};});
+   const dayMap=new Map(days.map(d=>[d.key,d]));
+   orders.forEach(o=>{if(!o.created_at)return;const d=new Date(o.created_at);const key=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');if(dayMap.has(key))dayMap.get(key).count++;});
+   const maxDay=Math.max(1,...days.map(d=>d.count));
+   const weeklyHtml=days.map(d=>'<div class="md-day" title="'+d.count+' commande(s)"><strong>'+d.count+'</strong><div class="md-day-bar" style="height:'+Math.max(4,Math.round(d.count/maxDay*118))+'px"></div><small>'+d.label+'</small></div>').join('');
+   let topProductsHtml='<p class="muted">Les ventes apparaîtront après les premières commandes retirées.</p>';
+   const completedIds=completed.slice(0,500).map(o=>o.id);
+   if(completedIds.length){
+    const {data:sales,error:salesError}=await SUPA.from('order_items').select('product_id,quantity,products(name)').in('order_id',completedIds);
+    if(salesError){topProductsHtml='<p class="muted">Impossible de charger les produits les plus vendus.</p>';}
+    else{
+     const totals=new Map();
+     (sales||[]).forEach(item=>{const key=String(item.product_id);const row=totals.get(key)||{name:item.products?.name||'Produit',quantity:0};row.quantity+=Number(item.quantity||0);totals.set(key,row);});
+     const top=[...totals.values()].sort((a,b)=>b.quantity-a.quantity).slice(0,5);
+     topProductsHtml=top.length?'<table class="order-table"><tr><th>Produit</th><th>Unités</th></tr>'+top.map(x=>'<tr><td>'+esc(x.name)+'</td><td><strong>'+x.quantity+'</strong></td></tr>').join('')+'</table><p class="muted">Calculé sur les 500 dernières commandes retirées au maximum.</p>':'<p class="muted">Aucune ligne de vente disponible.</p>';
+    }
+   }
+   const lowStockHtml=lowStock.length?'<div style="overflow:auto"><table class="order-table"><tr><th>Produit</th><th>Format</th><th>Stock</th></tr>'+lowStock.slice(0,8).map(x=>'<tr><td>'+esc(x.product)+'</td><td>'+esc(x.capacity)+'</td><td><span class="md-stock-alert">'+x.stock+'</span></td></tr>').join('')+'</table></div>'+(lowStock.length>8?'<p class="muted">Et '+(lowStock.length-8)+' autre(s) format(s) à surveiller.</p>':''):'<p class="muted">Aucun stock faible détecté. Seuil d’alerte : 5 unités.</p>';
+   host.innerHTML='<div class="md-dashboard"><div class="stats">'+
+    '<div class="stat"><small>Ventes encaissées</small><strong>'+money(collectedRevenue)+'</strong><span class="muted">'+completed.length+' commande(s) retirée(s)</span></div>'+
+    '<div class="stat"><small>Nouvelles commandes</small><strong>'+pendingCount+'</strong><span class="muted">En attente de confirmation</span></div>'+
+    '<div class="stat"><small>Produits actifs</small><strong>'+activeProducts+'</strong><span class="muted">Sur '+prods.length+' produits</span></div>'+
+    '<div class="stat"><small>Clients</small><strong>'+customers.length+'</strong><span class="muted">Clients enregistrés</span></div></div>'+
+    '<div class="md-dashboard-grid"><section class="panel"><h3>Activité des 7 derniers jours</h3><p class="muted">Nombre de commandes créées par jour</p><div class="md-bars">'+weeklyHtml+'</div></section>'+
+    '<section class="panel"><h3>Produits les plus vendus</h3><p class="muted">Commandes retirées uniquement</p>'+topProductsHtml+'</section>'+
+    '<section class="panel"><h3>Alertes de stock</h3><p class="muted">'+lowStock.length+' format(s) à surveiller · seuil ≤ 5</p>'+lowStockHtml+'</section>'+
+    '<section class="panel"><h3>Dernières commandes</h3>'+recentHtml+'</section></div></div>';
   } else if(p==='products'){
    const [prods,cats]=await Promise.all([loadProducts(true),loadCategories()]);
    host.innerHTML=`<div class="panel"><h3>Catalogue produits</h3><div class="admin-actions"><button onclick="document.getElementById('newProduct').style.display='grid'">+ Ajouter un produit</button></div><form id="newProduct" style="display:none;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:12px 0"><input id="pn" placeholder="Nom du produit" required><input id="pref" placeholder="Référence"><input id="pcap" placeholder="Contenance (ex. 250 g, 1 L)"><input id="pp" type="number" min="0" step="0.01" placeholder="Prix DA" required><input id="ps" type="number" min="0" step="1" placeholder="Stock" required><select id="pc" required><option value="">Catégorie</option>${cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><input id="pdesc" placeholder="Description"><input id="pimg" type="url" placeholder="Lien de l’image (https://...)"><button class="blackbtn" type="submit">Enregistrer</button></form><div style="overflow:auto"><table class="order-table"><tr><th>Image</th><th>Produit</th><th>Formats disponibles</th><th>Prix dès</th><th>Stock total</th><th>Catégorie</th><th>État</th></tr>${prods.map(x=>`<tr><td>${x.image_url?`<img src="${esc(x.image_url)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px">`:"—"}</td><td>${esc(x.name)}</td><td>${(x.variants||[]).filter(v=>v.active!==false).map(v=>esc(v.weight||v.name)).join(', ')||'—'}</td><td>${money(Math.min(...((x.variants||[]).filter(v=>v.active!==false).map(v=>Number(v.price)).concat([Number(x.price)]))))}</td><td>${(x.variants||[]).reduce((s,v)=>s+Number(v.stock||0),0)}</td><td>${esc(cats.find(c=>c.id===x.category_id)?.name||'—')}</td><td>${(x.is_active??x.active)?'Actif':'Inactif'} <button type="button" onclick="editProduct(${Number(x.id)})">Modifier</button> <button type="button" onclick="manageProductVariants(${Number(x.id)})">Gérer les contenances</button> <button type="button" onclick="editProductImage(${Number(x.id)})">Image</button> <button type="button" onclick="toggleProductActive(${Number(x.id)},${(x.is_active??x.active)?'false':'true'})">${(x.is_active??x.active)?'Désactiver':'Activer'}</button></td></tr>`).join('')}</table></div></div>`;
