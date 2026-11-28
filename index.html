@@ -186,7 +186,10 @@
 </style>
 <style id="admin-analytics-v8">
 #admin .sales-v8{display:grid;gap:12px;margin:18px 0}#admin .sales-v8-row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(75px,auto);gap:8px;align-items:center;font-size:12px}#admin .sales-v8-row strong{text-align:right;overflow-wrap:anywhere}#admin .sales-v8-track{height:16px;background:#e5e7eb;border-radius:5px;overflow:hidden}#admin .sales-v8-track>div{height:100%;background:#176b4d;border-radius:5px}
-</style><style id="admin-stock-alerts-v9">#admin .stock-alert-v9-count{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0}#admin .stock-alert-v9-list{max-height:320px;overflow:auto;margin:12px 0}#admin .stock-alert-v9-list>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #e5e7eb}#admin .stock-alert-v9-list strong{white-space:nowrap}</style></head>
+</style><style id="admin-stock-alerts-v9">#admin .stock-alert-v9-count{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0}#admin .stock-alert-v9-list{max-height:320px;overflow:auto;margin:12px 0}#admin .stock-alert-v9-list>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #e5e7eb}#admin .stock-alert-v9-list strong{white-space:nowrap}</style><style id="mobile-checkout-v11">
+.mobile-checkout-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.mobile-checkout-head h2{margin:5px 0 12px}.mobile-checkout-head small{color:#720d2b;font-weight:700}.mobile-checkout-head button{border:1px solid #d7cdbb;background:white;color:#720d2b;border-radius:10px;min-width:44px;min-height:44px;font-size:24px;cursor:pointer}
+@media(max-width:600px){#cartModal,#checkoutModal{padding:0;align-items:flex-end}#cartModal .cart-panel,#checkoutModal .cart-panel{box-sizing:border-box;width:100%;max-height:92vh;max-height:92dvh;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));overscroll-behavior:contain}#cartModal .cart-controls button,#cartModal .cart-actions button,#checkoutForm button{min-height:48px;font-size:16px}#cartModal .cart-controls button{min-width:44px}#cartModal .cart-qty,#checkoutForm input,#checkoutForm textarea{box-sizing:border-box;font-size:16px;min-height:44px}#cartModal .cart-total{border-top:1px solid #d7cdbb;padding-top:14px}#checkoutForm label{font-weight:600}#checkoutForm #submitOrderButton{width:100%;margin-top:8px}}
+</style></head>
 <body>
 <div id="shop">
 <div class="topline">✓ Produits 100% naturels　 |　 📍 Retrait sur place　 |　 🔒 Paiement au retrait</div>
@@ -206,9 +209,9 @@
 
 </div>
 
-<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><h2>Votre panier</h2><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Retrait sur place · Paiement au retrait. Le stock sera vérifié lors de la commande.</p></div></div>
+<div id="cartModal" class="cart-modal" onclick="if(event.target===this)closeCart()"><div class="cart-panel"><div class="mobile-checkout-head"><div><small>Étape 1 sur 2</small><h2>Votre panier</h2></div><button type="button" aria-label="Fermer le panier" onclick="closeCart()">×</button></div><div id="cartItems"></div><div class="cart-total"><b>Total</b><b id="cartTotal">0 DA</b></div><div class="cart-actions"><button onclick="openCheckout()" id="checkoutButton">Commander</button><button onclick="closeCart()">Continuer mes achats</button><button onclick="clearCart()">Vider le panier</button></div><p class="muted">Retrait sur place · Paiement au retrait. Le stock sera vérifié lors de la commande.</p></div></div>
 <div id="checkoutModal" class="cart-modal" onclick="if(event.target===this)closeCheckout()"><div class="cart-panel">
- <h2>Finaliser votre commande</h2>
+ <div class="mobile-checkout-head"><div><small>Étape 2 sur 2</small><h2>Finaliser votre commande</h2></div><button type="button" aria-label="Retour au panier" onclick="closeCheckout()">×</button></div>
  <p class="muted">Paiement au retrait de votre commande</p>
  <form id="checkoutForm" style="display:grid;gap:10px">
   <label>Nom et prénom<input id="checkoutName" required maxlength="120" autocomplete="name" style="display:block;width:100%;padding:11px;border:1px solid #d7cdbb;border-radius:8px"></label>
